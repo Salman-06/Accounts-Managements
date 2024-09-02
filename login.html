@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Covai Traders</title>
+    <style>
+      /* Your existing CSS here... */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      html, body {
+        height: 100%;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        background-color: #eeeaea;
+      }
+
+      #form-ui {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+      }
+
+      #form {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 300px;
+        height: 472px;
+        padding: 25px;
+        background-color: #161616;
+        box-shadow: 0px 15px 60px #00ff7f;
+        outline: 1px solid #2b9962;
+        border-radius: 10px;
+      }
+
+      #form-body {
+        width: 100%;
+      }
+
+      #welcome-lines {
+        text-align: center;
+        line-height: 1.2;
+      }
+
+      #welcome-line-1 {
+        color: #00ff7f;
+        font-weight: 600;
+        font-size: 40px;
+      }
+
+      #welcome-line-2 {
+        color: #dde2dd;
+        font-size: 18px;
+        margin-top: 17px;
+      }
+
+      #input-area {
+        margin-top: 40px;
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+      }
+
+      .form-inp {
+        width: 100%;
+      }
+
+      .form-inp input {
+        width: 100%;
+        padding: 11px 25px;
+        background: transparent;
+        border: 1px solid #e3e3e3;
+        border-radius: 8px;
+        font-size: 13.4px;
+        color: #00ff7f;
+      }
+
+      .form-inp input:focus {
+        border: 1px solid #00ff7f;
+        outline: none;
+      }
+
+      #submit-button-cvr {
+        margin-top: 20px;
+        width: 100%;
+      }
+
+      #submit-button {
+        width: 100%;
+        padding: 14px;
+        background-color: transparent;
+        color: #00ff7f;
+        font-weight: 600;
+        font-size: 14px;
+        border: 1px solid #00ff7f;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.3s ease-in-out;
+      }
+
+      #submit-button:hover {
+        background-color: #00ff7f;
+        color: #161616;
+      }
+
+      #forgot-pass {
+        text-align: center;
+        margin-top: 10px;
+      }
+
+      #forgot-pass a {
+        color: #868686;
+        font-size: 12px;
+        text-decoration: none;
+      }
+
+      #bar {
+        margin: 30px auto 0 auto;
+        width: 28px;
+        height: 8px;
+        background-color: #00ff7f;
+        border-radius: 10px;
+        position: relative;
+      }
+
+      #bar:before,
+      #bar:after {
+        content: "";
+        position: absolute;
+        width: 8px;
+        height: 8px;
+        background-color: #ececec;
+        border-radius: 50%;
+      }
+
+      #bar:before {
+        right: -20px;
+      }
+
+      #bar:after {
+        right: -38px;
+      }
+
+      .sidebar {
+        background-color: #ffffff;
+        width: 250px;
+        height: 100vh;
+        position: fixed;
+        top: 0;
+        left: 0;
+        padding: 20px;
+        box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+        font-family: "Times New Roman", Times, serif;
+        transition: transform 0.3s ease;
+        transform: translateX(0);
+      }
+
+      .sidebar.closed {
+        transform: translateX(-100%);
+      }
+
+      .sidebar h2 {
+        font-size: 18px;
+        text-align: center;
+        margin-bottom: 20px;
+        color: #ff9900;
+      }
+
+      .sidebar ul {
+        list-style-type: none;
+        padding: 0;
+      }
+
+      .sidebar ul li {
+        margin-bottom: 10px;
+      }
+
+      .sidebar ul li a {
+        text-decoration: none;
+        color: #333333;
+        font-size: 16px;
+        display: block;
+        padding: 10px 15px;
+        border-radius: 5px;
+        transition: background-color 0.3s;
+      }
+
+      .sidebar ul li a:hover {
+        background-color: #f1f1f1;
+      }
+
+      .sidebar ul li ul.submenu {
+        margin-left: 15px;
+        display: none;
+      }
+
+      .sidebar ul li.active ul.submenu {
+        display: block;
+      }
+
+      .sidebar ul li a .icon {
+        margin-right: 10px;
+        color: #ff9900;
+      }
+
+      .logout {
+        position: absolute;
+        left: 20px;
+        bottom: 20px;
+      }
+
+      .main-content {
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+        padding: 20px;
+        background-color: #f8f9fa;
+        overflow-y: auto;
+        margin-left: 250px; /* Adjust to the sidebar width */
+        transition: margin-left 0.3s ease;
+      }
+
+      .main-content.expanded {
+        margin-left: 0;
+      }
+
+      iframe {
+        border: none;
+        width: 100%;
+        height: 100%;
+      }
+
+      #toggleSidebar {
+        position: fixed;
+        left: 250px;
+        top: 20px;
+        cursor: pointer;
+        font-size: 24px;
+        background-color: #00ff7f;
+        color: #161616;
+        border: none;
+        border-radius: 50%;
+        padding: 10px;
+        transition: left 0.3s ease;
+      }
+
+      #toggleSidebar.closed {
+        left: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Login Form -->
+    <div id="loginPage">
+      <div id="form-ui">
+        <form action="javascript:void(0)" method="post" id="form" onsubmit="login()">
+          <div id="form-body">
+            <div id="welcome-lines">
+              <div id="welcome-line-1">Covai Traders</div>
+              <div id="welcome-line-2">Welcome Back, Covai</div>
+            </div>
+            <div id="input-area">
+              <div class="form-inp">
+                <input id="userId" placeholder="userId" type="text" />
+              </div>
+              <div class="form-inp">
+                <input id="password" placeholder="Password" type="password" />
+              </div>
+            </div>
+            <div id="submit-button-cvr">
+              <button id="submit-button" type="submit">Login</button>
+            </div>
+            <div id="forgot-pass">
+              <a href="#">Forgot password?</a>
+            </div>
+            <div id="bar"></div>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Main Page -->
+    <div id="mainPage" style="display: none; position: relative;">
+      <button id="toggleSidebar" onclick="toggleSidebar()">&#9776;</button>
+      <div class="sidebar" id="sidebar">
+        <h2>Dashboard</h2>
+        <ul>
+          <li>
+            <a href="#" onclick="showSection('home')">
+              <span class="icon">&#127968;</span> Home
+            </a>
+          </li>
+          <li>
+            <a href="#" onclick="toggleMenu('salesMenu')">
+              <span class="icon">&#128179;</span> Sales
+            </a>
+            <ul id="salesMenu" class="submenu">
+              <li><a href="#" onclick="loadContent('sales.html', 'invoice')">Sales Invoice</a></li>
+              <li><a href="#" onclick="loadContent('sales.html', 'list')">Sales List</a></li>
+              <li><a href="#" onclick="loadContent('sales.html', 'report')">Sales Report</a></li>
+            </ul>
+          </li>
+          <li>
+            <a href="#" onclick="toggleMenu('purchaseMenu')">
+              <span class="icon">&#128722;</span> Purchase
+            </a>
+            <ul id="purchaseMenu" class="submenu">
+              <li><a href="#" onclick="loadContent('purchase.html', 'purchaseInvoice')">Purchase Invoice</a></li>
+              <li><a href="#" onclick="loadContent('purchase.html', 'purchaseList')">Purchase List</a></li>
+              <li><a href="#" onclick="loadContent('purchase.html', 'purchaseReport')">Purchase Report</a></li>
+            </ul>
+          </li>
+          <li class="logout">
+            <a href="#" onclick="logout()">
+              <span class="icon">&#128682;</span> Logout
+            </a>
+          </li>
+        </ul>
+      </div>
+      <div class="main-content" id="mainContent">
+        <iframe id="contentFrame" src=""></iframe>
+      </div>
+    </div>
+
+    <script>
+      let currentUserId = ""; // Initial user ID
+      let currentPassword = ""; // Initial password
+
+      function login() {
+        const userId = document.getElementById("userId").value;
+        const password = document.getElementById("password").value;
+
+        if (userId === currentUserId && password === currentPassword) {
+          document.getElementById("loginPage").style.display = "none";
+          document.getElementById("mainPage").style.display = "flex";
+        } else {
+          alert("Invalid login credentials. Please try again.");
+        }
+      }
+
+      function toggleMenu(menuId) {
+        const menu = document.getElementById(menuId);
+        menu.style.display = menu.style.display === "block" ? "none" : "block";
+      }
+
+      function loadContent(page, sectionId) {
+        document.getElementById("contentFrame").src = page + "#" + sectionId;
+      }
+
+      function logout() {
+        if (confirm("Are you sure you want to log out?")) {
+          document.getElementById("mainPage").style.display = "none";
+          document.getElementById("loginPage").style.display = "block";
+        }
+      }
+
+      function toggleSidebar() {
+        const sidebar = document.getElementById("sidebar");
+        const mainContent = document.getElementById("mainContent");
+        const toggleButton = document.getElementById("toggleSidebar");
+
+        if (sidebar.classList.contains("closed")) {
+          sidebar.classList.remove("closed");
+          mainContent.classList.remove("expanded");
+          toggleButton.classList.remove("closed");
+        } else {
+          sidebar.classList.add("closed");
+          mainContent.classList.add("expanded");
+          toggleButton.classList.add("closed");
+        }
+      }
+    </script>
+  </body>
+</html>
