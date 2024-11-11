@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock List</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <script type="text/javascript" src="app.js" defer></script>
+    <link rel="icon" href="favicon.png" type="image/png">
+
+    <style>
+        .btn-3d {
+            position: relative;
+            padding: 0.5rem 1rem;
+            border: none;
+            background: #4a90e2;
+            color: white;
+            font-weight: bold;
+            transition: transform 0.1s;
+        }
+        .btn-3d:active { transform: translateY(4px); }
+        .btn-3d::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 100%;
+            width: 100%;
+            height: 4px;
+            background: #3a7bd5;
+        }
+    </style>
+</head>
+<body class="bg-11121a">
+    <nav id="sidebar">
+        <ul>
+          <li>
+            <span class="logo">COVAI TRADERS</span>
+            <button onclick=toggleSidebar() id="toggle-btn">
+              <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed">
+                <path
+                  d="m313-480 155 156q11 11 11.5 27.5T468-268q-11 11-28 11t-28-11L228-452q-6-6-8.5-13t-2.5-15q0-8 2.5-15t8.5-13l184-184q11-11 27.5-11.5T468-692q11 11 11 28t-11 28L313-480Zm264 0 155 156q11 11 11.5 27.5T732-268q-11 11-28 11t-28-11L492-452q-6-6-8.5-13t-2.5-15q0-8 2.5-15t8.5-13l184-184q11-11 27.5-11.5T732-692q11 11 11 28t-11 28L577-480Z" />
+              </svg>
+            </button>
+          </li>
+          <li class="active">
+            <a href="dashboard.html">
+              <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed">
+                <path
+                  d="M240-200h120v-200q0-17 11.5-28.5T400-440h160q17 0 28.5 11.5T600-400v200h120v-360L480-740 240-560v360Zm-80 0v-360q0-19 8.5-36t23.5-28l240-180q21-16 48-16t48 16l240 180q15 11 23.5 28t8.5 36v360q0 33-23.5 56.5T720-120H560q-17 0-28.5-11.5T520-160v-200h-80v200q0 17-11.5 28.5T400-120H240q-33 0-56.5-23.5T160-200Zm320-270Z" />
+              </svg>
+              <span>Home</span>
+            </a>
+          </li>
+          <li>
+            <button onclick=toggleSubMenu(this) class="dropdown-btn">
+              <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed">
+                <path
+                  d="M520-640v-160q0-17 11.5-28.5T560-840h240q17 0 28.5 11.5T840-800v160q0 17-11.5 28.5T800-600H560q-17 0-28.5-11.5T520-640ZM120-480v-320q0-17 11.5-28.5T160-840h240q17 0 28.5 11.5T440-800v320q0 17-11.5 28.5T400-440H160q-17 0-28.5-11.5T120-480Zm400 320v-320q0-17 11.5-28.5T560-520h240q17 0 28.5 11.5T840-480v320q0 17-11.5 28.5T800-120H560q-17 0-28.5-11.5T520-160Zm-400 0v-160q0-17 11.5-28.5T160-360h240q17 0 28.5 11.5T440-320v160q0 17-11.5 28.5T400-120H160q-17 0-28.5-11.5T120-160Zm80-360h160v-240H200v240Zm400 320h160v-240H600v240Zm0-480h160v-80H600v80ZM200-200h160v-80H200v80Zm160-320Zm240-160Zm0 240ZM360-280Z" />
+              </svg>
+              <span>Customer</span>
+              <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed">
+                <path
+                  d="M480-361q-8 0-15-2.5t-13-8.5L268-556q-11-11-11-28t11-28q11-11 28-11t28 11l156 156 156-156q11-11 28-11t28 11q11 11 11 28t-11 28L508-372q-6 6-13 8.5t-15 2.5Z" />
+              </svg>
+            </button>
+            <ul class="sub-menu">
+              <div>
+                <li><a href="newCustomer.html">New Customer</a></li>
+                <li><a href="viewCustomer.html">View Customer</a></li>
+              </div>
+            </ul>
+          </li>
+          <li>
+            <button onclick=toggleSubMenu(this) class="dropdown-btn">
+              <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed">
+                <path
+                  d="M160-160q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h207q16 0 30.5 6t25.5 17l57 57h320q33 0 56.5 23.5T880-640v400q0 33-23.5 56.5T800-160H160Zm0-80h640v-400H447l-80-80H160v480Zm0 0v-480 480Zm400-160v40q0 17 11.5 28.5T600-320q17 0 28.5-11.5T640-360v-40h40q17 0 28.5-11.5T720-440q0-17-11.5-28.5T680-480h-40v-40q0-17-11.5-28.5T600-560q-17 0-28.5 11.5T560-520v40h-40q-17 0-28.5 11.5T480-440q0 17 11.5 28.5T520-400h40Z" />
+              </svg>
+              <span>Sales</span>
+              <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed">
+                <path
+                  d="M480-361q-8 0-15-2.5t-13-8.5L268-556q-11-11-11-28t11-28q11-11 28-11t28 11l156 156 156-156q11-11 28-11t28 11q11 11 11 28t-11 28L508-372q-6 6-13 8.5t-15 2.5Z" />
+              </svg>
+            </button>
+            <ul class="sub-menu">
+              <div>
+                <li><a href="sales.html">Sales Entry</a></li>
+                <li><a href="salesListnew.html">Sales List</a></li>
+                <li><a href="salesReportnew.html">Sales Report</a></li>
+              </div>
+            </ul>
+          </li>
+          <li>
+            <button onclick=toggleSubMenu(this) class="dropdown-btn">
+              <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed">
+                <path
+                  d="M160-160q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h207q16 0 30.5 6t25.5 17l57 57h320q33 0 56.5 23.5T880-640v400q0 33-23.5 56.5T800-160H160Zm0-80h640v-400H447l-80-80H160v480Zm0 0v-480 480Zm400-160v40q0 17 11.5 28.5T600-320q17 0 28.5-11.5T640-360v-40h40q17 0 28.5-11.5T720-440q0-17-11.5-28.5T680-480h-40v-40q0-17-11.5-28.5T600-560q-17 0-28.5 11.5T560-520v40h-40q-17 0-28.5 11.5T480-440q0 17 11.5 28.5T520-400h40Z" />
+              </svg>
+              <span>Outstanding</span>
+              <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed">
+                <path
+                  d="M480-361q-8 0-15-2.5t-13-8.5L268-556q-11-11-11-28t11-28q11-11 28-11t28 11l156 156 156-156q11-11 28-11t28 11q11 11 11 28t-11 28L508-372q-6 6-13 8.5t-15 2.5Z" />
+              </svg>
+            </button>
+            <ul class="sub-menu">
+              <div>
+                <li><a href="newout.html">O/S Entry</a></li>
+                <li><a href="odcollected_list.html">OD Collected List</a></li>
+                <li><a href="od_collected.html">OD Collected Report</a></li>
+              </div>
+            </ul>
+          </li>
+          <li>
+            <button onclick=toggleSubMenu(this) class="dropdown-btn">
+              <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed">
+                <path
+                  d="M160-160q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h207q16 0 30.5 6t25.5 17l57 57h320q33 0 56.5 23.5T880-640v400q0 33-23.5 56.5T800-160H160Zm0-80h640v-400H447l-80-80H160v480Zm0 0v-480 480Zm400-160v40q0 17 11.5 28.5T600-320q17 0 28.5-11.5T640-360v-40h40q17 0 28.5-11.5T720-440q0-17-11.5-28.5T680-480h-40v-40q0-17-11.5-28.5T600-560q-17 0-28.5 11.5T560-520v40h-40q-17 0-28.5 11.5T480-440q0 17 11.5 28.5T520-400h40Z" />
+              </svg>
+              <span>Stock</span>
+              <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed">
+                <path
+                  d="M480-361q-8 0-15-2.5t-13-8.5L268-556q-11-11-11-28t11-28q11-11 28-11t28 11l156 156 156-156q11-11 28-11t28 11q11 11 11 28t-11 28L508-372q-6 6-13 8.5t-15 2.5Z" />
+              </svg>
+            </button>
+            <ul class="sub-menu">
+              <div>
+                <li><a href="stock.html">Stock Entry</a></li>
+                <li><a href="stocklist.html">Stock List</a></li>
+                <li><a href="stockReport.html">Stock Report</a></li>
+              </div>
+            </ul>
+          </li>
+          <li>
+            <button onclick=toggleSubMenu(this) class="dropdown-btn">
+              <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 576 512" width="24px" fill="#e8eaed">
+                <path
+                  d="M0 24C0 10.7 10.7 0 24 0L69.5 0c22 0 41.5 12.8 50.6 32l411 0c26.3 0 45.5 25 38.6 50.4l-41 152.3c-8.5 31.4-37 53.3-69.5 53.3l-288.5 0 5.4 28.5c2.2 11.3 12.1 19.5 23.6 19.5L488 336c13.3 0 24 10.7 24 24s-10.7 24-24 24l-288.3 0c-34.6 0-64.3-24.6-70.7-58.5L77.4 54.5c-.7-3.8-4-6.5-7.9-6.5L24 48C10.7 48 0 37.3 0 24zM128 464a48 48 0 1 1 96 0 48 48 0 1 1 -96 0zm336-48a48 48 0 1 1 0 96 48 48 0 1 1 0-96z" />
+              </svg>
+              <span>Purchase</span>
+              <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed">
+                <path
+                  d="M480-361q-8 0-15-2.5t-13-8.5L268-556q-11-11-11-28t11-28q11-11 28-11t28 11l156 156 156-156q11-11 28-11t28 11q11 11 11 28t-11 28L508-372q-6 6-13 8.5t-15 2.5Z" />
+              </svg>
+            </button>
+            <ul class="sub-menu">
+              <div>
+                <li><a href="purchaseEntry.html">Purchase Entry</a></li>
+                <li><a href="purchaseList.html">Purchase List</a></li>
+                <li><a href="purchaseReport.html">Purchase Report</a></li>
+              </div>
+            </ul>
+          </li>
+          <li class="active">
+            <a href="https://covaitraders.in/accounts/Accounts">
+              <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed">
+                <path
+                  d="M560-520q50 0 85-35t35-85q0-50-35-85t-85-35q-50 0-85 35t-35 85q0 50 35 85t85 35ZM320-330q45-53 108-81.5T560-440q69 0 132 28.5T800-330v-470H320v470Zm0 90q-33 0-56.5-23.5T240-320v-480q0-33 23.5-56.5T320-880h480q33 0 56.5 23.5T880-800v480q0 33-23.5 56.5T800-240H320ZM160-80q-33 0-56.5-23.5T80-160v-560h80v560h560v80H160Zm400-520q-17 0-28.5-11.5T520-640q0-17 11.5-28.5T560-680q17 0 28.5 11.5T600-640q0 17-11.5 28.5T560-600ZM428-320h264q-29-20-63-30t-69-10q-35 0-69 10t-63 30Zm132-245Z" />
+              </svg>
+              <span>Switch Acc</span>
+               </a>
+          </li>
+          <li>
+            <a href="#" onclick="handleLogout()">
+              <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed">
+                <path
+                  d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h280v80H200v560h280v80H200Zm440-160-55-58 102-102H360v-80h327L585-622l55-58 200 200-200 200Z" />
+              </svg>
+              <span>Logout</span>
+               </a>
+          </li>
+        </ul>
+      </nav>
+      <script>
+          // Ensure the function is defined globally in app.js
+    function handleLogout() {
+      const confirmation = confirm("Are you sure you want to logout?");
+      if (confirmation) {
+        window.location.href = 'index.html'; // Redirect to login page
+      }
+    }
+      </script>
+  
+                <div class="container mx-auto p-4">
+                    <div class="flex justify-between items-center mb-4">
+                        <h2 class="text-2xl font-semibold">Stock List</h2>
+                        <input type="text" id="search" placeholder="Search by Date or Collected" class="border p-2 rounded" onkeyup="fetchStockList()">
+                    </div>
+                    
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full border-collapse border border-gray-300">
+                            <thead>
+                                <tr>
+                                    <th class="border border-gray-300 p-2">#</th>
+                                    <th class="border border-gray-300 p-2">Date</th>
+                                    <th class="border border-gray-300 p-2">12kg Load</th>
+                                    <th class="border border-gray-300 p-2">12kg Empty</th>
+                                    <th class="border border-gray-300 p-2">17kg Load</th>
+                                    <th class="border border-gray-300 p-2">17kg Empty</th>
+                                    <th class="border border-gray-300 p-2">Hose</th>
+                                    <th class="border border-gray-300 p-2">SRG</th>
+                                    <th class="border border-gray-300 p-2">Ind SRG</th>
+                                    <th class="border border-gray-300 p-2">Adap</th>
+                                    <th class="border border-gray-300 p-2">Ind Adap</th>
+                                    <th class="border border-gray-300 p-2">Lighter</th>
+                                    <th class="border border-gray-300 p-2">Stove</th>
+                                    <th class="border border-gray-300 p-2">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="stock-list">
+                                <!-- Rows will be populated here -->
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="2" class="border border-gray-300 p-2 font-semibold">Total</td>
+                                    <td id="total_closing_12kg_load" class="border border-gray-300 p-2">0</td>
+                                    <td id="total_closing_12kg_empty" class="border border-gray-300 p-2">0</td>
+                                    <td id="total_closing_17kg_load" class="border border-gray-300 p-2">0</td>
+                                    <td id="total_closing_17kg_empty" class="border border-gray-300 p-2">0</td>
+                                    <td id="total_closing_hose" class="border border-gray-300 p-2">0</td>
+                                    <td id="total_closing_srg" class="border border-gray-300 p-2">0</td>
+                                    <td id="total_closing_ind_srg" class="border border-gray-300 p-2">0</td>
+                                    <td id="total_closing_adap" class="border border-gray-300 p-2">0</td>
+                                    <td id="total_closing_ind_adap" class="border border-gray-300 p-2">0</td>
+                                    <td id="total_closing_lighter" class="border border-gray-300 p-2">0</td>
+                                    <td id="total_closing_stove" class="border border-gray-300 p-2">0</td>
+                                    <td class="border border-gray-300 p-2"></td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+            
+                    <div class="flex justify-center items-center mt-4 space-x-4">
+                        <button class="btn-3d" onclick="prevPage()">Previous</button>
+                        <span id="page-info" class="text-lg font-semibold">Page 1 of 1</span>
+                        <button class="btn-3d" onclick="nextPage()">Next</button>
+                    </div>
+                </div>
+            
+                <script>
+                    let currentPage = 1;
+                    let totalPages = 1;
+            
+                    function fetchStockList() {
+                        const query = document.getElementById('search').value;
+                        fetch(`fetch_stock_list.php?page=${currentPage}&query=${query}`)
+                            .then(response => response.json())
+                            .then(data => {
+                                renderTable(data.stock);
+                                calculateTotal(data.stock);
+                                totalPages = data.totalPages; // Assumes total pages are returned from backend
+                                updatePageInfo();
+                            })
+                            .catch(error => console.error('Error fetching stock list:', error));
+                    }
+            
+                    function renderTable(stockData) {
+                        const stockList = document.getElementById('stock-list');
+                        stockList.innerHTML = stockData.map((item, index) => `
+                            <tr>
+                                <td class="border border-gray-300 p-2">${(currentPage - 1) * 10 + index + 1}</td>
+                                <td class="border border-gray-300 p-2">${formatDate(item.date)}</td>
+                                <td class="border border-gray-300 p-2">${item.closing_12kg_load}</td>
+                                <td class="border border-gray-300 p-2">${item.closing_12kg_empty}</td>
+                                <td class="border border-gray-300 p-2">${item.closing_17kg_load}</td>
+                                <td class="border border-gray-300 p-2">${item.closing_17kg_empty}</td>
+                                <td class="border border-gray-300 p-2">${item.closing_hose}</td>
+                                <td class="border border-gray-300 p-2">${item.closing_srg}</td>
+                                <td class="border border-gray-300 p-2">${item.closing_ind_srg}</td>
+                                <td class="border border-gray-300 p-2">${item.closing_adap}</td>
+                                <td class="border border-gray-300 p-2">${item.closing_ind_adap}</td>
+                                <td class="border border-gray-300 p-2">${item.closing_lighter}</td>
+                                <td class="border border-gray-300 p-2">${item.closing_stove}</td>
+                                <td class="border border-gray-300 p-2 text-center">
+                                    <button class="action-btn edit-btn" onclick="editRow(${item.id})">Edit</button>
+                                    <button class="action-btn" onclick="deleteRow(${item.id})">Delete</button>
+                                </td>
+                            </tr>
+                        `).join('');
+                    }
+            
+                    function formatDate(dateString) {
+                        const date = new Date(dateString);
+                        return `${String(date.getDate()).padStart(2, '0')}-${String(date.getMonth() + 1).padStart(2, '0')}-${date.getFullYear()}`;
+                    }
+            
+                    function calculateTotal(stockData) {
+                        const totals = stockData.reduce((acc, item) => {
+                            Object.keys(item).forEach(key => {
+                                if (!acc[key]) acc[key] = 0;
+                                acc[key] += parseFloat(item[key]) || 0;
+                            });
+                            return acc;
+                        }, {});
+            
+                        document.getElementById('total_closing_12kg_load').textContent = totals['closing_12kg_load'] || 0;
+                        document.getElementById('total_closing_12kg_empty').textContent = totals['closing_12kg_empty'] || 0;
+                        document.getElementById('total_closing_17kg_load').textContent = totals['closing_17kg_load'] || 0;
+                        document.getElementById('total_closing_17kg_empty').textContent = totals['closing_17kg_empty'] || 0;
+                        document.getElementById('total_closing_hose').textContent = totals['closing_hose'] || 0;
+                        document.getElementById('total_closing_srg').textContent = totals['closing_srg'] || 0;
+                        document.getElementById('total_closing_ind_srg').textContent = totals['closing_ind_srg'] || 0;
+                        document.getElementById('total_closing_adap').textContent = totals['closing_adap'] || 0;
+                        document.getElementById('total_closing_ind_adap').textContent = totals['closing_ind_adap'] || 0;
+                        document.getElementById('total_closing_lighter').textContent = totals['closing_lighter'] || 0;
+                        document.getElementById('total_closing_stove').textContent = totals['closing_stove'] || 0;
+                    }
+            
+                    function updatePageInfo() {
+                        document.getElementById('page-info').textContent = `Page ${currentPage} of ${totalPages}`;
+                    }
+            
+                    function nextPage() {
+                        if (currentPage < totalPages) {
+                            currentPage++;
+                            fetchStockList();
+                        }
+                    }
+            
+                    function prevPage() {
+                        if (currentPage > 1) {
+                            currentPage--;
+                            fetchStockList();
+                        }
+                    }
+            
+                    function editRow(id) {
+                        window.location.href = `edit_stock.php?id=${id}`;
+                    }
+            
+                    function deleteRow(id) {
+                        if (confirm("Are you sure you want to delete this record?")) {
+                            fetch(`delete_stock.php?id=${id}`, { method: 'POST' })
+                                .then(response => response.text())
+                                .then(data => {
+                                    alert(data);
+                                    fetchStockList();
+                                })
+                                .catch(error => console.error('Error deleting record:', error));
+                        }
+                    }
+            
+                    document.addEventListener("DOMContentLoaded", fetchStockList);
+                </script>
+            </body>
+            </html>

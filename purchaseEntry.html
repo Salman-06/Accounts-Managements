@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New Purchase Entry</title>
+    <link rel="stylesheet" href="style.css">
+    <script type="text/javascript" src="app.js" defer></script>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Select2 CSS (for searchable dropdown) -->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
+    <!-- Custom CSS to style Select2 like TailwindCSS input fields -->
+    <style>
+        .select2-container--default .select2-selection--single {
+            border: 1px solid #cbd5e1;
+            /* Tailwind border color (gray-300) */
+            padding: 0.75rem;
+            /* Padding to match other inputs */
+            height: auto;
+            /* Make height consistent */
+            border-radius: 0.375rem;
+            /* Rounded corners */
+        }
+
+        .select2-container--default .select2-selection--single .select2-selection__rendered {
+            color: #0d0f11;
+            /* Tailwind text color (gray-700) */
+            line-height: 1.5rem;
+            /* Adjust line height */
+        }
+
+        .select2-container--default .select2-selection--single .select2-selection__arrow {
+            height: 100%;
+            /* Ensure arrow is vertically centered */
+        }
+         /* Override Select2 dropdown text color */
+         .select2-container--default .select2-results__option {
+            color: black; /* Ensure the option text is black */
+            background-color: white; /* Ensure the option background is white */
+            font-family: Poppins, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        /* To ensure the selected option in the dropdown is black */
+        .select2-container--default .select2-selection--single .select2-selection__rendered {
+            color: black; /* Ensure selected text is black */
+        }
+        .container {
+          font-family: Poppins, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+    </style>
+</head>
+
+<body class="bg-11121a">
+  <nav id="sidebar">
+    <ul>
+      <li>
+        <span class="logo">COVAI TRADERS</span>
+        <button onclick=toggleSidebar() id="toggle-btn">
+          <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed">
+            <path
+              d="m313-480 155 156q11 11 11.5 27.5T468-268q-11 11-28 11t-28-11L228-452q-6-6-8.5-13t-2.5-15q0-8 2.5-15t8.5-13l184-184q11-11 27.5-11.5T468-692q11 11 11 28t-11 28L313-480Zm264 0 155 156q11 11 11.5 27.5T732-268q-11 11-28 11t-28-11L492-452q-6-6-8.5-13t-2.5-15q0-8 2.5-15t8.5-13l184-184q11-11 27.5-11.5T732-692q11 11 11 28t-11 28L577-480Z" />
+          </svg>
+        </button>
+      </li>
+      <li class="active">
+        <a href="dashboard.html">
+          <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed">
+            <path
+              d="M240-200h120v-200q0-17 11.5-28.5T400-440h160q17 0 28.5 11.5T600-400v200h120v-360L480-740 240-560v360Zm-80 0v-360q0-19 8.5-36t23.5-28l240-180q21-16 48-16t48 16l240 180q15 11 23.5 28t8.5 36v360q0 33-23.5 56.5T720-120H560q-17 0-28.5-11.5T520-160v-200h-80v200q0 17-11.5 28.5T400-120H240q-33 0-56.5-23.5T160-200Zm320-270Z" />
+          </svg>
+          <span>Home</span>
+        </a>
+      </li>
+      <li>
+        <button onclick=toggleSubMenu(this) class="dropdown-btn">
+          <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed">
+            <path
+              d="M520-640v-160q0-17 11.5-28.5T560-840h240q17 0 28.5 11.5T840-800v160q0 17-11.5 28.5T800-600H560q-17 0-28.5-11.5T520-640ZM120-480v-320q0-17 11.5-28.5T160-840h240q17 0 28.5 11.5T440-800v320q0 17-11.5 28.5T400-440H160q-17 0-28.5-11.5T120-480Zm400 320v-320q0-17 11.5-28.5T560-520h240q17 0 28.5 11.5T840-480v320q0 17-11.5 28.5T800-120H560q-17 0-28.5-11.5T520-160Zm-400 0v-160q0-17 11.5-28.5T160-360h240q17 0 28.5 11.5T440-320v160q0 17-11.5 28.5T400-120H160q-17 0-28.5-11.5T120-160Zm80-360h160v-240H200v240Zm400 320h160v-240H600v240Zm0-480h160v-80H600v80ZM200-200h160v-80H200v80Zm160-320Zm240-160Zm0 240ZM360-280Z" />
+          </svg>
+          <span>Customer</span>
+          <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed">
+            <path
+              d="M480-361q-8 0-15-2.5t-13-8.5L268-556q-11-11-11-28t11-28q11-11 28-11t28 11l156 156 156-156q11-11 28-11t28 11q11 11 11 28t-11 28L508-372q-6 6-13 8.5t-15 2.5Z" />
+          </svg>
+        </button>
+        <ul class="sub-menu">
+          <div>
+            <li><a href="newCustomer.html">New Customer</a></li>
+            <li><a href="viewCustomer.html">View Customer</a></li>
+          </div>
+        </ul>
+      </li>
+      <li>
+        <button onclick=toggleSubMenu(this) class="dropdown-btn">
+          <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed">
+            <path
+              d="M160-160q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h207q16 0 30.5 6t25.5 17l57 57h320q33 0 56.5 23.5T880-640v400q0 33-23.5 56.5T800-160H160Zm0-80h640v-400H447l-80-80H160v480Zm0 0v-480 480Zm400-160v40q0 17 11.5 28.5T600-320q17 0 28.5-11.5T640-360v-40h40q17 0 28.5-11.5T720-440q0-17-11.5-28.5T680-480h-40v-40q0-17-11.5-28.5T600-560q-17 0-28.5 11.5T560-520v40h-40q-17 0-28.5 11.5T480-440q0 17 11.5 28.5T520-400h40Z" />
+          </svg>
+          <span>Sales</span>
+          <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed">
+            <path
+              d="M480-361q-8 0-15-2.5t-13-8.5L268-556q-11-11-11-28t11-28q11-11 28-11t28 11l156 156 156-156q11-11 28-11t28 11q11 11 11 28t-11 28L508-372q-6 6-13 8.5t-15 2.5Z" />
+          </svg>
+        </button>
+        <ul class="sub-menu">
+          <div>
+            <li><a href="sales.html">Sales Entry</a></li>
+            <li><a href="salesListnew.html">Sales List</a></li>
+            <li><a href="salesReportnew.html">Sales Report</a></li>
+          </div>
+        </ul>
+      </li>
+      <li>
+        <button onclick=toggleSubMenu(this) class="dropdown-btn">
+          <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed">
+            <path
+              d="M160-160q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h207q16 0 30.5 6t25.5 17l57 57h320q33 0 56.5 23.5T880-640v400q0 33-23.5 56.5T800-160H160Zm0-80h640v-400H447l-80-80H160v480Zm0 0v-480 480Zm400-160v40q0 17 11.5 28.5T600-320q17 0 28.5-11.5T640-360v-40h40q17 0 28.5-11.5T720-440q0-17-11.5-28.5T680-480h-40v-40q0-17-11.5-28.5T600-560q-17 0-28.5 11.5T560-520v40h-40q-17 0-28.5 11.5T480-440q0 17 11.5 28.5T520-400h40Z" />
+          </svg>
+          <span>Outstanding</span>
+          <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed">
+            <path
+              d="M480-361q-8 0-15-2.5t-13-8.5L268-556q-11-11-11-28t11-28q11-11 28-11t28 11l156 156 156-156q11-11 28-11t28 11q11 11 11 28t-11 28L508-372q-6 6-13 8.5t-15 2.5Z" />
+          </svg>
+        </button>
+        <ul class="sub-menu">
+          <div>
+            <li><a href="newout.html">O/S Entry</a></li>
+            <li><a href="odcollected_list.html">OD Collected List</a></li>
+            <li><a href="od_collected.html">OD Collected Report</a></li>
+          </div>
+        </ul>
+      </li>
+      <li>
+        <button onclick=toggleSubMenu(this) class="dropdown-btn">
+          <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed">
+            <path
+              d="M160-160q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h207q16 0 30.5 6t25.5 17l57 57h320q33 0 56.5 23.5T880-640v400q0 33-23.5 56.5T800-160H160Zm0-80h640v-400H447l-80-80H160v480Zm0 0v-480 480Zm400-160v40q0 17 11.5 28.5T600-320q17 0 28.5-11.5T640-360v-40h40q17 0 28.5-11.5T720-440q0-17-11.5-28.5T680-480h-40v-40q0-17-11.5-28.5T600-560q-17 0-28.5 11.5T560-520v40h-40q-17 0-28.5 11.5T480-440q0 17 11.5 28.5T520-400h40Z" />
+          </svg>
+          <span>Stock</span>
+          <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed">
+            <path
+              d="M480-361q-8 0-15-2.5t-13-8.5L268-556q-11-11-11-28t11-28q11-11 28-11t28 11l156 156 156-156q11-11 28-11t28 11q11 11 11 28t-11 28L508-372q-6 6-13 8.5t-15 2.5Z" />
+          </svg>
+        </button>
+        <ul class="sub-menu">
+          <div>
+            <li><a href="stock.html">Stock Entry</a></li>
+            <li><a href="stocklist.html">Stock List</a></li>
+            <li><a href="stockReport.html">Stock Report</a></li>
+          </div>
+        </ul>
+      </li>
+      <li>
+        <button onclick=toggleSubMenu(this) class="dropdown-btn">
+          <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 576 512" width="24px" fill="#e8eaed">
+            <path
+              d="M0 24C0 10.7 10.7 0 24 0L69.5 0c22 0 41.5 12.8 50.6 32l411 0c26.3 0 45.5 25 38.6 50.4l-41 152.3c-8.5 31.4-37 53.3-69.5 53.3l-288.5 0 5.4 28.5c2.2 11.3 12.1 19.5 23.6 19.5L488 336c13.3 0 24 10.7 24 24s-10.7 24-24 24l-288.3 0c-34.6 0-64.3-24.6-70.7-58.5L77.4 54.5c-.7-3.8-4-6.5-7.9-6.5L24 48C10.7 48 0 37.3 0 24zM128 464a48 48 0 1 1 96 0 48 48 0 1 1 -96 0zm336-48a48 48 0 1 1 0 96 48 48 0 1 1 0-96z" />
+          </svg>
+          <span>Purchase</span>
+          <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed">
+            <path
+              d="M480-361q-8 0-15-2.5t-13-8.5L268-556q-11-11-11-28t11-28q11-11 28-11t28 11l156 156 156-156q11-11 28-11t28 11q11 11 11 28t-11 28L508-372q-6 6-13 8.5t-15 2.5Z" />
+          </svg>
+        </button>
+        <ul class="sub-menu">
+          <div>
+            <li><a href="purchaseEntry.html">Purchase Entry</a></li>
+            <li><a href="purchaseList.html">Purchase List</a></li>
+            <li><a href="purchaseReport.html">Purchase Report</a></li>
+          </div>
+        </ul>
+      </li>
+      <li class="active">
+        <a href="https://covaitraders.in/accounts/Accounts">
+          <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed">
+            <path
+              d="M560-520q50 0 85-35t35-85q0-50-35-85t-85-35q-50 0-85 35t-35 85q0 50 35 85t85 35ZM320-330q45-53 108-81.5T560-440q69 0 132 28.5T800-330v-470H320v470Zm0 90q-33 0-56.5-23.5T240-320v-480q0-33 23.5-56.5T320-880h480q33 0 56.5 23.5T880-800v480q0 33-23.5 56.5T800-240H320ZM160-80q-33 0-56.5-23.5T80-160v-560h80v560h560v80H160Zm400-520q-17 0-28.5-11.5T520-640q0-17 11.5-28.5T560-680q17 0 28.5 11.5T600-640q0 17-11.5 28.5T560-600ZM428-320h264q-29-20-63-30t-69-10q-35 0-69 10t-63 30Zm132-245Z" />
+          </svg>
+          <span>Switch Acc</span>
+           </a>
+      </li>
+      <li>
+        <a href="#" onclick="handleLogout()">
+          <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed">
+            <path
+              d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h280v80H200v560h280v80H200Zm440-160-55-58 102-102H360v-80h327L585-622l55-58 200 200-200 200Z" />
+          </svg>
+          <span>Logout</span>
+           </a>
+      </li>
+    </ul>
+  </nav>
+<main>
+    <div class="container mx-auto p-10 bg-11121a rounded-lg shadow-lg">
+        <h2 class="text-2xl font-bold text-center text-green-600 mb-8">New Purchase Entry</h2>
+        <form id="purchaseForm" action="submit_purchase.php" method="POST">
+
+            <!-- First row: Purchase Date, Customer Name, Remarks -->
+            <div class="grid grid-cols-3 gap-6 mb-6">
+                <!-- Purchase Date Input -->
+                <div>
+                  <label for="purchaseDate" class="block font-semibold mb-2">Purchase Date:</label>
+                  <input type="date" id="purchaseDate" name="purchaseDate" class="w-full p-3 border rounded text-black" required>
+              </div>           
+                <!-- Customer Name Dropdown -->
+                <div>
+                    <label for="customerName" class="block font-semibold mb-2">Customer Name (CVT-Name):</label>
+                    <select id="customerName" name="customerName" class="w-full p-3 border rounded text-black" required>
+                        <option class="w-full p-3 border rounded text-black" value="">Select a customer</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="load12kg" class="block font-semibold mb-2">12kg Load:</label>
+                    <input type="number" id="load12kg" name="load12kg" class="w-full p-3 text-black border rounded"
+                        required>
+                </div>
+            </div>
+            <!-- Second row: 12kg Load, 12kg Given -->
+            <div class="grid grid-cols-3 gap-6 mb-6">
+
+                <div>
+                    <label for="given12kg" class="block font-semibold mb-2">12kg Given:</label>
+                    <input type="number" id="given12kg" name="given12kg" class="w-full p-3 border rounded text-black"
+                        required>
+                </div>
+                <div>
+                    <label for="load17kg" class="block font-semibold mb-2">17kg Load:</label>
+                    <input type="number" id="load17kg" name="load17kg" class="w-full p-3 border rounded text-black"
+                        required>
+                </div>
+                <div>
+                    <label for="given17kg" class="block font-semibold mb-2">17kg Given:</label>
+                    <input type="number" id="given17kg" name="given17kg" class="w-full p-3 border rounded text-black"
+                        required>
+                </div>
+            </div>
+
+            <!-- Third row: SRG, Adap, Stove, Lighter, Hose -->
+            <div class="grid grid-cols-5 gap-6 mb-6">
+                <div>
+                    <label for="srg" class="block font-semibold mb-2">SRG:</label>
+                    <input type="number" id="srg" name="srg" class="w-full p-3 border rounded text-black">
+                </div>
+                <div>
+                    <label for="Adap" class="block font-semibold mb-2">Adap:</label>
+                    <input type="number" id="adap" name="adap" class="w-full p-3 border rounded text-black">
+                </div>
+                <div>
+                    <label for="stove" class="block font-semibold mb-2">Stove:</label>
+                    <input type="number" id="stove" name="stove" class="w-full p-3 border rounded text-black">
+                </div>
+                <div>
+                    <label for="lighter" class="block font-semibold mb-2">Lighter:</label>
+                    <input type="number" id="lighter" name="lighter" class="w-full p-3 border rounded text-black">
+                </div>
+                <div>
+                    <label for="hose" class="block font-semibold mb-2">Hose:</label>
+                    <input type="number" id="hose" name="hose" class="w-full p-3 border rounded text-black">
+                </div>
+            </div>
+
+            <!-- Fourth row: 12kg Amount, 17kg Amount -->
+            <div class="grid grid-cols-2 gap-6 mb-6">
+                <div>
+                    <label for="amount12kg" class="block font-semibold mb-2">12kg Amount:</label>
+                    <input type="number" id="amount12kg" name="amount12kg" step="0.01"
+                        class="w-full p-3 border rounded text-black" required>
+                </div>
+                <div>
+                    <label for="amount17kg" class="block font-semibold mb-2">17kg Amount:</label>
+                    <input type="number" id="amount17kg" name="amount17kg" step="0.01"
+                        class="w-full p-3 border rounded text-black" required>
+                </div>
+            </div>
+
+            <!-- Fifth row: Total Purchase Value (Automatically Calculated) -->
+            <div class="grid grid-cols-2 gap-6 mb-6">
+                <div>
+                    <label for="totalPurchaseValue" class="block font-semibold mb-2">Total Purchase Value:</label>
+                    <input type="number" id="totalPurchaseValue" name="totalPurchaseValue" step="0.01"
+                        class="w-full p-3 border rounded text-black bg-gray-100" readonly>
+                </div>
+                <div>
+                    <button id="form-submit-button"
+                        class="w-small bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-lg shadow-lg transition duration-300">
+                        Add Purchase
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</main>
+    <!-- Select2 JavaScript (for searchable dropdown) -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+    <script>
+        let customersData = [];
+
+        function formatDateForInput(date) {
+    const day = ("0" + date.getDate()).slice(-2);
+    const month = ("0" + (date.getMonth() + 1)).slice(-2);
+    const year = date.getFullYear();
+    return `${year}-${month}-${day}`;
+}
+
+function setLoginDate() {
+    const dateInput = document.getElementById("purchaseDate");
+    const currentDate = new Date();
+    
+    // Format the date as yyyy-mm-dd for the date input type
+    const formattedDate = formatDateForInput(currentDate);
+    
+    // Set the value of the date input field
+    dateInput.value = formattedDate;
+}
+
+// Set date on page load
+window.onload = setLoginDate;
+
+
+        // Fetch customer names and populate the select dropdown
+        function fetchCustomers() {
+            fetch('fetch_customer_data.php')
+                .then(response => response.json())
+                .then(data => {
+                    if (!data.success) {
+                        throw new Error('Failed to fetch customers');
+                    }
+                    customersData = data.customers;
+                    populateCustomerDropdown(customersData); // Call function to populate dropdown
+                })
+                .catch(error => {
+                    console.error('Error fetching customers:', error);
+                    alert('Error fetching customer data');
+                });
+        }
+
+        function populateCustomerDropdown(customers) {
+            const customerSelect = $('#customerName');
+            customerSelect.empty(); // Clear existing options
+
+            customerSelect.append('<option value="">Select a customer</option>');
+
+            customers.forEach(customer => {
+                const option = `<option value="${customer.customer_id} - ${customer.customer_name}">${customer.customer_id} - ${customer.customer_name}</option>`;
+                customerSelect.append(option);
+            });
+
+            // Enable Select2 on the customer dropdown for search functionality
+            customerSelect.select2({
+                placeholder: "Select a customer",
+                allowClear: true
+            });
+        }
+        // Function to calculate the total purchase value dynamically
+        function calculateTotal() {
+            const amount12kg = parseFloat(document.getElementById('amount12kg').value) || 0;
+            const amount17kg = parseFloat(document.getElementById('amount17kg').value) || 0;
+            const total = amount12kg + amount17kg;
+            document.getElementById('totalPurchaseValue').value = total.toFixed(2);
+        }
+
+        // Attach the calculation function to the input fields
+        document.getElementById('amount12kg').addEventListener('input', calculateTotal);
+        document.getElementById('amount17kg').addEventListener('input', calculateTotal);
+       
+
+        // Call the function to fetch and populate customers when the page loads
+        $(document).ready(function () {
+            fetchCustomers();  // Call the fetchCustomers function when the page is loaded
+        });
+
+        // Check if we are editing an existing purchase
+const urlParams = new URLSearchParams(window.location.search);
+const purchaseId = urlParams.get('id');  // Get the purchase ID from the URL
+
+if (purchaseId) {
+    // Fetch purchase details and pre-fill the form
+    fetchPurchaseDetails(purchaseId);  // Call function to fetch purchase details
+}
+
+// Function to fetch purchase details and populate the form
+function fetchPurchaseDetails(id) {
+    fetch(`get_purchases_edit.php?id=${id}`)  // Request the purchase details for the given ID
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not OK');
+            }
+            return response.json();  // Parse the response as JSON
+        })
+        .then(data => {
+            // Populate form fields with fetched data
+            document.getElementById('purchaseDate').value = data.purchaseDate;
+            document.getElementById('customerName').value = data.customerName;
+            document.getElementById('load12kg').value = data.load12kg;
+            document.getElementById('given12kg').value = data.given12kg;
+            document.getElementById('load17kg').value = data.load17kg;
+            document.getElementById('given17kg').value = data.given17kg;
+            document.getElementById('srg').value = data.srg;
+            document.getElementById('adap').value = data.adap;
+            document.getElementById('stove').value = data.stove;
+            document.getElementById('lighter').value = data.lighter;
+            document.getElementById('hose').value = data.hose;
+            document.getElementById('amount12kg').value = data.amount12kg;
+            document.getElementById('amount17kg').value = data.amount17kg;
+            document.getElementById('totalPurchaseValue').value = data.totalPurchaseValue;
+            
+            // Change the form button to 'Update Purchase'
+            document.getElementById('form-submit-button').textContent = 'Update Purchase';
+        })
+        .catch(error => {
+            console.error('Error fetching purchase details:', error);
+        });
+}
+
+// If the user clicks the 'Update Purchase' button
+document.getElementById('purchaseForm').addEventListener('submit', function(e) {
+    e.preventDefault();  // Prevent default form submission
+
+    if (purchaseId) {
+        // Update the existing purchase
+        updatePurchase(purchaseId);  // Call update function
+    } else {
+      addPurchase();
+    }
+});
+
+function updatePurchase(id) {
+    const formData = new FormData(document.getElementById('purchaseForm'));
+
+    fetch(`update_purchase.php?id=${id}`, {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert('Purchase updated successfully');
+            window.location.href = 'purchaseList.html';  // Redirect to purchase list
+        } else {
+            alert('Failed to update the purchase');
+        }
+    })
+    .catch(error => console.error('Error updating purchase:', error));
+}
+
+function addPurchase() {
+    const formData = new FormData(document.getElementById('purchaseForm'));
+
+    fetch('submit_purchase.php', {
+        method: 'POST',
+        body: formData
+    })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert('Purchase added successfully');
+                window.location.href = 'purchaseEntry.html'; // Redirect to purchase list
+            } else {
+                alert('Failed to add the purchase');
+            }
+        })
+        .catch(error => console.error('Error adding purchase:', error));
+}
+
+    </script>
+</div>
+</html>

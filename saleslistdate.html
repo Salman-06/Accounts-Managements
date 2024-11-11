@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sales Data Viewer</title>
+    <link rel="stylesheet" href="style.css">
+    <script type="text/javascript" src="app.js" defer></script>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+
+    <body class="bg-11121a">
+        <nav id="sidebar">
+            <ul>
+              <li>
+                <span class="logo">COVAI TRADERS</span>
+                <button onclick=toggleSidebar() id="toggle-btn">
+                  <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed">
+                    <path
+                      d="m313-480 155 156q11 11 11.5 27.5T468-268q-11 11-28 11t-28-11L228-452q-6-6-8.5-13t-2.5-15q0-8 2.5-15t8.5-13l184-184q11-11 27.5-11.5T468-692q11 11 11 28t-11 28L313-480Zm264 0 155 156q11 11 11.5 27.5T732-268q-11 11-28 11t-28-11L492-452q-6-6-8.5-13t-2.5-15q0-8 2.5-15t8.5-13l184-184q11-11 27.5-11.5T732-692q11 11 11 28t-11 28L577-480Z" />
+                  </svg>
+                </button>
+              </li>
+              <li class="active">
+                <a href="dashboard.html">
+                  <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed">
+                    <path
+                      d="M240-200h120v-200q0-17 11.5-28.5T400-440h160q17 0 28.5 11.5T600-400v200h120v-360L480-740 240-560v360Zm-80 0v-360q0-19 8.5-36t23.5-28l240-180q21-16 48-16t48 16l240 180q15 11 23.5 28t8.5 36v360q0 33-23.5 56.5T720-120H560q-17 0-28.5-11.5T520-160v-200h-80v200q0 17-11.5 28.5T400-120H240q-33 0-56.5-23.5T160-200Zm320-270Z" />
+                  </svg>
+                  <span>Home</span>
+                </a>
+              </li>
+              <li>
+                <button onclick=toggleSubMenu(this) class="dropdown-btn">
+                  <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed">
+                    <path
+                      d="M520-640v-160q0-17 11.5-28.5T560-840h240q17 0 28.5 11.5T840-800v160q0 17-11.5 28.5T800-600H560q-17 0-28.5-11.5T520-640ZM120-480v-320q0-17 11.5-28.5T160-840h240q17 0 28.5 11.5T440-800v320q0 17-11.5 28.5T400-440H160q-17 0-28.5-11.5T120-480Zm400 320v-320q0-17 11.5-28.5T560-520h240q17 0 28.5 11.5T840-480v320q0 17-11.5 28.5T800-120H560q-17 0-28.5-11.5T520-160Zm-400 0v-160q0-17 11.5-28.5T160-360h240q17 0 28.5 11.5T440-320v160q0 17-11.5 28.5T400-120H160q-17 0-28.5-11.5T120-160Zm80-360h160v-240H200v240Zm400 320h160v-240H600v240Zm0-480h160v-80H600v80ZM200-200h160v-80H200v80Zm160-320Zm240-160Zm0 240ZM360-280Z" />
+                  </svg>
+                  <span>Customer</span>
+                  <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed">
+                    <path
+                      d="M480-361q-8 0-15-2.5t-13-8.5L268-556q-11-11-11-28t11-28q11-11 28-11t28 11l156 156 156-156q11-11 28-11t28 11q11 11 11 28t-11 28L508-372q-6 6-13 8.5t-15 2.5Z" />
+                  </svg>
+                </button>
+                <ul class="sub-menu">
+                  <div>
+                    <li><a href="newCustomer.html">New Customer</a></li>
+                    <li><a href="viewCustomer.html">View Customer</a></li>
+                  </div>
+                </ul>
+              </li>
+              <li>
+                <button onclick=toggleSubMenu(this) class="dropdown-btn">
+                  <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed">
+                    <path
+                      d="M160-160q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h207q16 0 30.5 6t25.5 17l57 57h320q33 0 56.5 23.5T880-640v400q0 33-23.5 56.5T800-160H160Zm0-80h640v-400H447l-80-80H160v480Zm0 0v-480 480Zm400-160v40q0 17 11.5 28.5T600-320q17 0 28.5-11.5T640-360v-40h40q17 0 28.5-11.5T720-440q0-17-11.5-28.5T680-480h-40v-40q0-17-11.5-28.5T600-560q-17 0-28.5 11.5T560-520v40h-40q-17 0-28.5 11.5T480-440q0 17 11.5 28.5T520-400h40Z" />
+                  </svg>
+                  <span>Sales</span>
+                  <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed">
+                    <path
+                      d="M480-361q-8 0-15-2.5t-13-8.5L268-556q-11-11-11-28t11-28q11-11 28-11t28 11l156 156 156-156q11-11 28-11t28 11q11 11 11 28t-11 28L508-372q-6 6-13 8.5t-15 2.5Z" />
+                  </svg>
+                </button>
+                <ul class="sub-menu">
+                  <div>
+                    <li><a href="sales.html">Sales Entry</a></li>
+                    <li><a href="salesListnew.html">Sales List</a></li>
+                    <li><a href="saleslistdate.html">Sales List with Date</a></li>
+                    <li><a href="salesReportnew.html">Sales Report</a></li>
+                  </div>
+                </ul>
+              </li>
+              <li>
+                <button onclick=toggleSubMenu(this) class="dropdown-btn">
+                  <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed">
+                    <path
+                      d="M160-160q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h207q16 0 30.5 6t25.5 17l57 57h320q33 0 56.5 23.5T880-640v400q0 33-23.5 56.5T800-160H160Zm0-80h640v-400H447l-80-80H160v480Zm0 0v-480 480Zm400-160v40q0 17 11.5 28.5T600-320q17 0 28.5-11.5T640-360v-40h40q17 0 28.5-11.5T720-440q0-17-11.5-28.5T680-480h-40v-40q0-17-11.5-28.5T600-560q-17 0-28.5 11.5T560-520v40h-40q-17 0-28.5 11.5T480-440q0 17 11.5 28.5T520-400h40Z" />
+                  </svg>
+                  <span>Outstanding</span>
+                  <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed">
+                    <path
+                      d="M480-361q-8 0-15-2.5t-13-8.5L268-556q-11-11-11-28t11-28q11-11 28-11t28 11l156 156 156-156q11-11 28-11t28 11q11 11 11 28t-11 28L508-372q-6 6-13 8.5t-15 2.5Z" />
+                  </svg>
+                </button>
+                <ul class="sub-menu">
+                  <div>
+                    <li><a href="newout.html">O/S Entry</a></li>
+                    <li><a href="odcollected_list.html">OD Collected List</a></li>
+                    <li><a href="od_collected.html">OD Collected Report</a></li>
+                  </div>
+                </ul>
+              </li>
+              <li>
+                <button onclick=toggleSubMenu(this) class="dropdown-btn">
+                  <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed">
+                    <path
+                      d="M160-160q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h207q16 0 30.5 6t25.5 17l57 57h320q33 0 56.5 23.5T880-640v400q0 33-23.5 56.5T800-160H160Zm0-80h640v-400H447l-80-80H160v480Zm0 0v-480 480Zm400-160v40q0 17 11.5 28.5T600-320q17 0 28.5-11.5T640-360v-40h40q17 0 28.5-11.5T720-440q0-17-11.5-28.5T680-480h-40v-40q0-17-11.5-28.5T600-560q-17 0-28.5 11.5T560-520v40h-40q-17 0-28.5 11.5T480-440q0 17 11.5 28.5T520-400h40Z" />
+                  </svg>
+                  <span>Stock</span>
+                  <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed">
+                    <path
+                      d="M480-361q-8 0-15-2.5t-13-8.5L268-556q-11-11-11-28t11-28q11-11 28-11t28 11l156 156 156-156q11-11 28-11t28 11q11 11 11 28t-11 28L508-372q-6 6-13 8.5t-15 2.5Z" />
+                  </svg>
+                </button>
+                <ul class="sub-menu">
+                  <div>
+                    <li><a href="stock.html">Stock Entry</a></li>
+                    <li><a href="stocklist.html">Stock List</a></li>
+                    <li><a href="stockReport.html">Stock Report</a></li>
+                  </div>
+                </ul>
+              </li>
+              <li>
+                <button onclick=toggleSubMenu(this) class="dropdown-btn">
+                  <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 576 512" width="24px" fill="#e8eaed">
+                    <path
+                      d="M0 24C0 10.7 10.7 0 24 0L69.5 0c22 0 41.5 12.8 50.6 32l411 0c26.3 0 45.5 25 38.6 50.4l-41 152.3c-8.5 31.4-37 53.3-69.5 53.3l-288.5 0 5.4 28.5c2.2 11.3 12.1 19.5 23.6 19.5L488 336c13.3 0 24 10.7 24 24s-10.7 24-24 24l-288.3 0c-34.6 0-64.3-24.6-70.7-58.5L77.4 54.5c-.7-3.8-4-6.5-7.9-6.5L24 48C10.7 48 0 37.3 0 24zM128 464a48 48 0 1 1 96 0 48 48 0 1 1 -96 0zm336-48a48 48 0 1 1 0 96 48 48 0 1 1 0-96z" />
+                  </svg>
+                  <span>Purchase</span>
+                  <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed">
+                    <path
+                      d="M480-361q-8 0-15-2.5t-13-8.5L268-556q-11-11-11-28t11-28q11-11 28-11t28 11l156 156 156-156q11-11 28-11t28 11q11 11 11 28t-11 28L508-372q-6 6-13 8.5t-15 2.5Z" />
+                  </svg>
+                </button>
+                <ul class="sub-menu">
+                  <div>
+                    <li><a href="purchaseEntry.html">Purchase Entry</a></li>
+                    <li><a href="purchaseList.html">Purchase List</a></li>
+                    <li><a href="purchaseReport.html">Purchase Report</a></li>
+                  </div>
+                </ul>
+              </li>
+              <li class="active">
+                <a href="https://covaitraders.in/accounts/Accounts">
+                  <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed">
+                    <path
+                      d="M560-520q50 0 85-35t35-85q0-50-35-85t-85-35q-50 0-85 35t-35 85q0 50 35 85t85 35ZM320-330q45-53 108-81.5T560-440q69 0 132 28.5T800-330v-470H320v470Zm0 90q-33 0-56.5-23.5T240-320v-480q0-33 23.5-56.5T320-880h480q33 0 56.5 23.5T880-800v480q0 33-23.5 56.5T800-240H320ZM160-80q-33 0-56.5-23.5T80-160v-560h80v560h560v80H160Zm400-520q-17 0-28.5-11.5T520-640q0-17 11.5-28.5T560-680q17 0 28.5 11.5T600-640q0 17-11.5 28.5T560-600ZM428-320h264q-29-20-63-30t-69-10q-35 0-69 10t-63 30Zm132-245Z" />
+                  </svg>
+                  <span>Switch Acc</span>
+                   </a>
+              </li>
+              <li>
+                <a href="#" onclick="handleLogout()">
+                  <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed">
+                    <path
+                      d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h280v80H200v560h280v80H200Zm440-160-55-58 102-102H360v-80h327L585-622l55-58 200 200-200 200Z" />
+                  </svg>
+                  <span>Logout</span>
+                   </a>
+              </li>
+            </ul>
+          </nav>
+        <main>
+            <!-- Date Selection Section -->
+            <div id="dateSelection" class="container mx-auto bg-11121a p-8 rounded-lg shadow-lg">
+                <h2 class="text-2xl font-bold text-white mb-4">Select Date for Sales Data</h2>
+                <div class="mb-4 flex space-x-3">
+                    <input type="date" id="selectDate" class="border px-3 py-2 rounded focus:outline-none text-black" required>
+                    <button
+                        onclick="fetchSalesDataByDate()"
+                        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded shadow-lg">
+                        Get Sales
+                    </button>
+                </div>
+            </div>
+    
+            <!-- Sales Data Display Section -->
+            <div id="salesContent" class="container mx-auto bg-11121a p-8 rounded-lg shadow-lg" style="display: none;">
+                <h2 class="text-2xl font-bold text-white mb-4">Sales Data for Selected Date</h2>
+    
+                <!-- Totals Summary Section -->
+                <div class="mb-4 flex space-x-4 text-white">
+                    <div>Total: <span id="totalForSelectedDate"></span></div>
+                    <div>OD Collected: <span id="odCollectedTotal"></span></div>
+                    <div>Outstanding: <span id="outstandingTotal"></span></div>
+                    <div>Final Total: <span id="finalTotal"></span></div>
+                </div>
+    
+                <!-- Search and Pagination Controls -->
+                <div class="text-right mb-4">
+                    <input type="text" id="search" placeholder="Search by Remarks or Customer Name..."
+                        class="border px-3 py-2 rounded focus:outline-none text-black" oninput="searchTable()">
+                </div>
+    
+                <!-- Sales Data Table -->
+                <table id="salesTable" class="min-w-full bg-11121a border border-gray-300 mt-6">
+                    <thead>
+                        <tr class="text-white uppercase text-sm leading-normal border-b border-gray-300">
+                            <th class="py-2 px-2 border border-gray-300">#</th>
+                            <th class="py-2 px-2 border border-gray-300">DATE</th>
+                            <th class="py-2 px-2 border border-gray-300">NAME</th>
+                            <th class="py-2 px-2 border border-gray-300">REMARKS</th>
+                            <th class="py-2 px-2 border border-gray-300">12KGL</th>
+                            <th class="py-2 px-2 border border-gray-300">12KGE</th>
+                            <th class="py-2 px-2 border border-gray-300">17KGL</th>
+                            <th class="py-2 px-2 border border-gray-300">17KGE</th>
+                            <th class="py-2 px-2 border border-gray-300">SRG</th>
+                            <th class="py-2 px-2 border border-gray-300">ADA</th>
+                            <th class="py-2 px-2 border border-gray-300">STV</th>
+                            <th class="py-2 px-2 border border-gray-300">LGH</th>
+                            <th class="py-2 px-2 border border-gray-300">HOSE</th>
+                            <th class="py-2 px-2 border border-gray-300">AMT</th>
+                            <th class="py-2 px-2 border border-gray-300">DEP</th>
+                            <th class="py-2 px-2 border border-gray-300">AMT Paid</th>
+                            <th class="py-2 px-2 border border-gray-300">AMT OD</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Sales data rows will be added here dynamically -->
+                    </tbody>
+                </table>
+    
+                <!-- Pagination Controls -->
+                <div class="flex justify-center mt-4">
+                    <button id="prev-btn" onclick="prevPage()"
+                        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded shadow-lg"
+                        disabled>
+                        Previous
+                    </button>
+                    <span id="page-info" class="px-4">Page 1</span>
+                    <button id="next-btn" onclick="nextPage()"
+                        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded shadow-lg">
+                        Next
+                    </button>
+                </div>
+            </div>
+        </main>   
+
+    <script>
+        let salesData = []; // Global variable to store all sales data
+        let currentPage = 1; // Track the current page
+        const rowsPerPage = 25; // Number of rows per page
+
+        function fetchSalesDataByDate() {
+            const selectedDate = document.getElementById('selectDate').value;
+            if (selectedDate) {
+                fetch(`fetch_sales_by_date.php?date=${selectedDate}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        salesData = data.sales; // Store the fetched data globally
+                        displaySalesData(); // Display the first page initially
+                        updateTotals(data.totals);
+                        document.getElementById("salesContent").style.display = "block";
+                        document.getElementById("dateSelection").style.display = "none";
+                    })
+                    .catch(error => console.error('Error fetching sales data:', error));
+            } else {
+                alert("Please select a date.");
+            }
+        }
+
+        function displaySalesData(filteredData = salesData) {
+            const tbody = document.getElementById('salesTable').querySelector('tbody');
+            tbody.innerHTML = ''; // Clear existing rows
+
+            // Calculate start and end indexes for pagination
+            const start = (currentPage - 1) * rowsPerPage;
+            const end = start + rowsPerPage;
+            const paginatedData = filteredData.slice(start, end);
+
+            paginatedData.forEach((item, index) => {
+                const row = `<tr class="text-white border-b border-gray-300">
+                    <td class="py-2 px-2 text-white border border-gray-300">${start + index + 1}</td>
+                    <td class="py-2 px-2 text-white border border-gray-300">${item.salesDate}</td>
+                    <td class="py-2 px-2 text-white border border-gray-300">${item.customerName}</td>
+                    <td class="py-2 px-2 text-white border border-gray-300">${item.remarks}</td>
+                    <td class="py-2 px-2 text-white border border-gray-300">${item.load12kg}</td>
+                    <td class="py-2 px-2 text-white border border-gray-300">${item.empty12kg}</td>
+                    <td class="py-2 px-2 text-white border border-gray-300">${item.load17kg}</td>
+                    <td class="py-2 px-2 text-white border border-gray-300">${item.empty17kg}</td>
+                    <td class="py-2 px-2 text-white border border-gray-300">${item.srg}</td>
+                    <td class="py-2 px-2 text-white border border-gray-300">${item.adap}</td>
+                    <td class="py-2 px-2 text-white border border-gray-300">${item.stove}</td>
+                    <td class="py-2 px-2 text-white border border-gray-300">${item.lighter}</td>
+                    <td class="py-2 px-2 text-white border border-gray-300">${item.hose}</td>
+                    <td class="py-2 px-2 text-white border border-gray-300">${item.totalAmount}</td>
+                    <td class="py-2 px-2 text-white border border-gray-300">${item.deposit}</td>
+                    <td class="py-2 px-2 text-white border border-gray-300">${item.amountPaid}</td>
+                    <td class="py-2 px-2 text-white border border-gray-300">${item.amountOD}</td>
+                </tr>`;
+                tbody.insertAdjacentHTML('beforeend', row);
+            });
+
+            // Add totals row
+            addTotalsRow(paginatedData);
+
+            // Update pagination controls
+            updatePagination(filteredData);
+        }
+
+        function addTotalsRow(data) {
+            // Calculate totals for each integer column
+            let totalAmountPaid = 0;
+
+            data.forEach(item => {
+                totalAmountPaid += parseFloat(item.amountPaid) || 0;
+            });
+
+            const tbody = document.getElementById('salesTable').querySelector('tbody');
+            const totalRow = `<tr class="font-bold text-white border-t border-gray-300">
+                <td colspan="4" class="py-2 px-2 text-right">Total</td>
+                <td class="py-2 px-2 text-white border border-gray-300">${load12kg}</td>
+                    <td class="py-2 px-2 text-white border border-gray-300">${empty12kg}</td>
+                    <td class="py-2 px-2 text-white border border-gray-300">${load17kg}</td>
+                    <td class="py-2 px-2 text-white border border-gray-300">${empty17kg}</td>
+                    <td class="py-2 px-2 text-white border border-gray-300">${srg}</td>
+                    <td class="py-2 px-2 text-white border border-gray-300">${adap}</td>
+                    <td class="py-2 px-2 text-white border border-gray-300">${stove}</td>
+                    <td class="py-2 px-2 text-white border border-gray-300">${lighter}</td>
+                    <td class="py-2 px-2 text-white border border-gray-300">${hose}</td>
+                    <td class="py-2 px-2 text-white border border-gray-300">${totalAmount}</td>
+                    <td class="py-2 px-2 text-white border border-gray-300">${deposit}</td>
+                <td class="py-2 px-2">${totalAmountPaid}</td>
+            </tr>`;
+            tbody.insertAdjacentHTML('beforeend', totalRow);
+        }
+
+        function updateTotals(totals) {
+            document.getElementById('totalForSelectedDate').innerText = totals.totalForSelectedDate;
+            document.getElementById('odCollectedTotal').innerText = totals.odCollectedTotal;
+            document.getElementById('outstandingTotal').innerText = totals.outstandingTotal;
+            document.getElementById('finalTotal').innerText = totals.finalTotal;
+        }
+
+        function searchTable() {
+            const searchValue = document.getElementById('search').value.toLowerCase();
+            const filteredData = salesData.filter(data =>
+                data.customerName.toLowerCase().includes(searchValue) ||
+                data.remarks.toLowerCase().includes(searchValue)
+            );
+            currentPage = 1; // Reset to first page after search
+            displaySalesData(filteredData); // Display the filtered data
+        }
+
+        function updatePagination(filteredData = salesData) {
+            const totalPages = Math.ceil(filteredData.length / rowsPerPage);
+            document.getElementById('page-info').textContent = `Page ${currentPage} of ${totalPages}`;
+            document.getElementById('prev-btn').disabled = currentPage === 1;
+            document.getElementById('next-btn').disabled = currentPage === totalPages;
+        }
+
+        function prevPage() {
+            if (currentPage > 1) {
+                currentPage--;
+                searchTable(); // Refresh the table with the updated page
+            }
+        }
+
+        function nextPage() {
+            const filteredData = salesData.filter(data =>
+                data.customerName.toLowerCase().includes(document.getElementById('search').value.toLowerCase()) ||
+                data.remarks.toLowerCase().includes(document.getElementById('search').value.toLowerCase())
+            );
+            const totalPages = Math.ceil(filteredData.length / rowsPerPage);
+            if (currentPage < totalPages) {
+                currentPage++;
+                searchTable(); // Refresh the table with the updated page
+            }
+        }
+    </script>
+</head>
+</body>
+</html>

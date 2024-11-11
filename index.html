@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Covai Traders - Accounts Management</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="min-h-screen bg-gray-100 flex items-start justify-center">
+
+    <div class="bg-white shadow-lg rounded-lg p-8 mt-10 w-full max-w-sm text-center">
+        <form action="#" method="post" autocomplete="off" onsubmit="return handleLogin(event)">
+            <div class="mb-6">
+                <h2 class="text-2xl font-bold">Welcome Back, Covai Traders</h2>
+                <p class="text-gray-500 mt-2">Sign In To Continue</p>
+            </div>
+            <div class="mb-4">
+                <label for="username-field" class="block text-left font-medium">Username</label>
+                <input type="text" name="username" id="username-field" class="w-full border-b-2 border-gray-300 focus:border-black focus:outline-none p-2 mt-1" required />
+            </div>
+            <div class="mb-4 relative">
+                <label for="password-field" class="block text-left font-medium">Password</label>
+                <input type="password" name="password" id="password-field" class="w-full border-b-2 border-gray-300 focus:border-black focus:outline-none p-2 mt-1" required />
+                <button type="button" class="absolute right-0 top-1/2 transform -translate-y-1/2 text-sm text-gray-500 hover:text-black" onclick="togglePassword()" id="toggle-password">
+                    Show
+                </button>
+            </div>
+            <div class="text-right mb-4">
+                <a href="#" class="text-sm text-gray-500 hover:text-black">Forget Password?</a>
+            </div>
+            <div>
+                <button type="submit" class="w-full bg-black text-white py-2 rounded hover:bg-gray-800 transition-colors"><span>Login</span></button>
+            </div>
+        </form>
+    </div>
+</div>
+<script src="password.js"></script>
+</body>
+</html>

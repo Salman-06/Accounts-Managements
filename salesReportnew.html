@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Datewise Sales Report</title>
+    <link rel="stylesheet" href="style.css">
+    <script type="text/javascript" src="app.js" defer></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.14/jspdf.plugin.autotable.min.js"></script>
+    <style>
+        .button-3d {
+            transition: all 0.2s ease;
+            box-shadow: 0px 4px 0px #2980b9;
+        }
+
+        .button-3d:active {
+            box-shadow: 0 0 #2980b9;
+            transform: translateY(4px);
+        }
+
+        .container {
+            font-family: Poppins, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+    </style>
+</head>
+
+<body class="bg-11121a">
+    <nav id="sidebar">
+        <ul>
+          <li>
+            <span class="logo">COVAI TRADERS</span>
+            <button onclick=toggleSidebar() id="toggle-btn">
+              <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed">
+                <path
+                  d="m313-480 155 156q11 11 11.5 27.5T468-268q-11 11-28 11t-28-11L228-452q-6-6-8.5-13t-2.5-15q0-8 2.5-15t8.5-13l184-184q11-11 27.5-11.5T468-692q11 11 11 28t-11 28L313-480Zm264 0 155 156q11 11 11.5 27.5T732-268q-11 11-28 11t-28-11L492-452q-6-6-8.5-13t-2.5-15q0-8 2.5-15t8.5-13l184-184q11-11 27.5-11.5T732-692q11 11 11 28t-11 28L577-480Z" />
+              </svg>
+            </button>
+          </li>
+          <li class="active">
+            <a href="dashboard.html">
+              <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed">
+                <path
+                  d="M240-200h120v-200q0-17 11.5-28.5T400-440h160q17 0 28.5 11.5T600-400v200h120v-360L480-740 240-560v360Zm-80 0v-360q0-19 8.5-36t23.5-28l240-180q21-16 48-16t48 16l240 180q15 11 23.5 28t8.5 36v360q0 33-23.5 56.5T720-120H560q-17 0-28.5-11.5T520-160v-200h-80v200q0 17-11.5 28.5T400-120H240q-33 0-56.5-23.5T160-200Zm320-270Z" />
+              </svg>
+              <span>Home</span>
+            </a>
+          </li>
+          <li>
+            <button onclick=toggleSubMenu(this) class="dropdown-btn">
+              <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed">
+                <path
+                  d="M520-640v-160q0-17 11.5-28.5T560-840h240q17 0 28.5 11.5T840-800v160q0 17-11.5 28.5T800-600H560q-17 0-28.5-11.5T520-640ZM120-480v-320q0-17 11.5-28.5T160-840h240q17 0 28.5 11.5T440-800v320q0 17-11.5 28.5T400-440H160q-17 0-28.5-11.5T120-480Zm400 320v-320q0-17 11.5-28.5T560-520h240q17 0 28.5 11.5T840-480v320q0 17-11.5 28.5T800-120H560q-17 0-28.5-11.5T520-160Zm-400 0v-160q0-17 11.5-28.5T160-360h240q17 0 28.5 11.5T440-320v160q0 17-11.5 28.5T400-120H160q-17 0-28.5-11.5T120-160Zm80-360h160v-240H200v240Zm400 320h160v-240H600v240Zm0-480h160v-80H600v80ZM200-200h160v-80H200v80Zm160-320Zm240-160Zm0 240ZM360-280Z" />
+              </svg>
+              <span>Customer</span>
+              <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed">
+                <path
+                  d="M480-361q-8 0-15-2.5t-13-8.5L268-556q-11-11-11-28t11-28q11-11 28-11t28 11l156 156 156-156q11-11 28-11t28 11q11 11 11 28t-11 28L508-372q-6 6-13 8.5t-15 2.5Z" />
+              </svg>
+            </button>
+            <ul class="sub-menu">
+              <div>
+                <li><a href="newCustomer.html">New Customer</a></li>
+                <li><a href="viewCustomer.html">View Customer</a></li>
+              </div>
+            </ul>
+          </li>
+          <li>
+            <button onclick=toggleSubMenu(this) class="dropdown-btn">
+              <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed">
+                <path
+                  d="M160-160q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h207q16 0 30.5 6t25.5 17l57 57h320q33 0 56.5 23.5T880-640v400q0 33-23.5 56.5T800-160H160Zm0-80h640v-400H447l-80-80H160v480Zm0 0v-480 480Zm400-160v40q0 17 11.5 28.5T600-320q17 0 28.5-11.5T640-360v-40h40q17 0 28.5-11.5T720-440q0-17-11.5-28.5T680-480h-40v-40q0-17-11.5-28.5T600-560q-17 0-28.5 11.5T560-520v40h-40q-17 0-28.5 11.5T480-440q0 17 11.5 28.5T520-400h40Z" />
+              </svg>
+              <span>Sales</span>
+              <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed">
+                <path
+                  d="M480-361q-8 0-15-2.5t-13-8.5L268-556q-11-11-11-28t11-28q11-11 28-11t28 11l156 156 156-156q11-11 28-11t28 11q11 11 11 28t-11 28L508-372q-6 6-13 8.5t-15 2.5Z" />
+              </svg>
+            </button>
+            <ul class="sub-menu">
+              <div>
+                <li><a href="sales.html">Sales Entry</a></li>
+                <li><a href="salesListnew.html">Sales List</a></li>
+                <li><a href="salesReportnew.html">Sales Report</a></li>
+              </div>
+            </ul>
+          </li>
+          <li>
+            <button onclick=toggleSubMenu(this) class="dropdown-btn">
+              <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed">
+                <path
+                  d="M160-160q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h207q16 0 30.5 6t25.5 17l57 57h320q33 0 56.5 23.5T880-640v400q0 33-23.5 56.5T800-160H160Zm0-80h640v-400H447l-80-80H160v480Zm0 0v-480 480Zm400-160v40q0 17 11.5 28.5T600-320q17 0 28.5-11.5T640-360v-40h40q17 0 28.5-11.5T720-440q0-17-11.5-28.5T680-480h-40v-40q0-17-11.5-28.5T600-560q-17 0-28.5 11.5T560-520v40h-40q-17 0-28.5 11.5T480-440q0 17 11.5 28.5T520-400h40Z" />
+              </svg>
+              <span>Outstanding</span>
+              <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed">
+                <path
+                  d="M480-361q-8 0-15-2.5t-13-8.5L268-556q-11-11-11-28t11-28q11-11 28-11t28 11l156 156 156-156q11-11 28-11t28 11q11 11 11 28t-11 28L508-372q-6 6-13 8.5t-15 2.5Z" />
+              </svg>
+            </button>
+            <ul class="sub-menu">
+              <div>
+                <li><a href="newout.html">O/S Entry</a></li>
+                <li><a href="odcollected_list.html">OD Collected List</a></li>
+                <li><a href="od_collected.html">OD Collected Report</a></li>
+              </div>
+            </ul>
+          </li>
+          <li>
+            <button onclick=toggleSubMenu(this) class="dropdown-btn">
+              <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed">
+                <path
+                  d="M160-160q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h207q16 0 30.5 6t25.5 17l57 57h320q33 0 56.5 23.5T880-640v400q0 33-23.5 56.5T800-160H160Zm0-80h640v-400H447l-80-80H160v480Zm0 0v-480 480Zm400-160v40q0 17 11.5 28.5T600-320q17 0 28.5-11.5T640-360v-40h40q17 0 28.5-11.5T720-440q0-17-11.5-28.5T680-480h-40v-40q0-17-11.5-28.5T600-560q-17 0-28.5 11.5T560-520v40h-40q-17 0-28.5 11.5T480-440q0 17 11.5 28.5T520-400h40Z" />
+              </svg>
+              <span>Stock</span>
+              <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed">
+                <path
+                  d="M480-361q-8 0-15-2.5t-13-8.5L268-556q-11-11-11-28t11-28q11-11 28-11t28 11l156 156 156-156q11-11 28-11t28 11q11 11 11 28t-11 28L508-372q-6 6-13 8.5t-15 2.5Z" />
+              </svg>
+            </button>
+            <ul class="sub-menu">
+              <div>
+                <li><a href="stock.html">Stock Entry</a></li>
+                <li><a href="stocklist.html">Stock List</a></li>
+                <li><a href="stockReport.html">Stock Report</a></li>
+              </div>
+            </ul>
+          </li>
+          <li>
+            <button onclick=toggleSubMenu(this) class="dropdown-btn">
+              <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 576 512" width="24px" fill="#e8eaed">
+                <path
+                  d="M0 24C0 10.7 10.7 0 24 0L69.5 0c22 0 41.5 12.8 50.6 32l411 0c26.3 0 45.5 25 38.6 50.4l-41 152.3c-8.5 31.4-37 53.3-69.5 53.3l-288.5 0 5.4 28.5c2.2 11.3 12.1 19.5 23.6 19.5L488 336c13.3 0 24 10.7 24 24s-10.7 24-24 24l-288.3 0c-34.6 0-64.3-24.6-70.7-58.5L77.4 54.5c-.7-3.8-4-6.5-7.9-6.5L24 48C10.7 48 0 37.3 0 24zM128 464a48 48 0 1 1 96 0 48 48 0 1 1 -96 0zm336-48a48 48 0 1 1 0 96 48 48 0 1 1 0-96z" />
+              </svg>
+              <span>Purchase</span>
+              <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed">
+                <path
+                  d="M480-361q-8 0-15-2.5t-13-8.5L268-556q-11-11-11-28t11-28q11-11 28-11t28 11l156 156 156-156q11-11 28-11t28 11q11 11 11 28t-11 28L508-372q-6 6-13 8.5t-15 2.5Z" />
+              </svg>
+            </button>
+            <ul class="sub-menu">
+              <div>
+                <li><a href="purchaseEntry.html">Purchase Entry</a></li>
+                <li><a href="purchaseList.html">Purchase List</a></li>
+                <li><a href="purchaseReport.html">Purchase Report</a></li>
+              </div>
+            </ul>
+          </li>
+          <li class="active">
+            <a href="https://covaitraders.in/accounts/Accounts">
+              <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed">
+                <path
+                  d="M560-520q50 0 85-35t35-85q0-50-35-85t-85-35q-50 0-85 35t-35 85q0 50 35 85t85 35ZM320-330q45-53 108-81.5T560-440q69 0 132 28.5T800-330v-470H320v470Zm0 90q-33 0-56.5-23.5T240-320v-480q0-33 23.5-56.5T320-880h480q33 0 56.5 23.5T880-800v480q0 33-23.5 56.5T800-240H320ZM160-80q-33 0-56.5-23.5T80-160v-560h80v560h560v80H160Zm400-520q-17 0-28.5-11.5T520-640q0-17 11.5-28.5T560-680q17 0 28.5 11.5T600-640q0 17-11.5 28.5T560-600ZM428-320h264q-29-20-63-30t-69-10q-35 0-69 10t-63 30Zm132-245Z" />
+              </svg>
+              <span>Switch Acc</span>
+               </a>
+          </li>
+          <li>
+            <a href="#" onclick="handleLogout()">
+              <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed">
+                <path
+                  d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h280v80H200v560h280v80H200Zm440-160-55-58 102-102H360v-80h327L585-622l55-58 200 200-200 200Z" />
+              </svg>
+              <span>Logout</span>
+               </a>
+          </li>
+        </ul>
+      </nav>
+    <main>
+        <div class="container mx-auto p-8" id="page1">
+            <h2 class="text-2xl font-bold text-center mb-6">Datewise Sales Report</h2>
+            <div class="flex justify-center space-x-4">
+                <div>
+                    <label for="fromDate" class="block text-lg mb-2 text-center">From Date:</label>
+                    <input type="date" id="fromDate" class="p-2 text-black border border-gray-400 rounded">
+                </div>
+                <div>
+                    <label for="toDate" class="block text-lg mb-2 text-center">To Date:</label>
+                    <input type="date" id="toDate" class="p-2 text-black border border-gray-400 rounded">
+                </div>
+            </div>
+            <div class="mt-6 text-center">
+                <button onclick="getReport()"
+                    class="button-3d bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
+                    Get Report
+                </button>
+            </div>
+        </div>
+
+
+        <div id="page2" class="container mx-auto p-8 hidden">
+            <h2 class="bg-11121a text-2xl font-bold mb-4">Sales Report</h2>
+            <div class="mb-4 flex justify-between items-center">
+                <div class="space-x-2">
+                    <button
+                        class="bg-blue-500 hover:bg-blue-700 text-white text-center font-bold py-2 px-4 rounded shadow-lg transform hover:scale-105 transition-transform"
+                        onclick="exportExcel()">Excel</button>
+                    <button
+                        class="bg-blue-500 hover:bg-blue-700 text-white text-center font-bold py-2 px-4 rounded shadow-lg transform hover:scale-105 transition-transform"
+                        onclick="exportPDF()">PDF</button>
+                    <button
+                        class="bg-blue-500 hover:bg-blue-700 text-white text-center font-bold py-2 px-4 rounded shadow-lg transform hover:scale-105 transition-transform"
+                        onclick="printTable()">Print</button>
+                </div>
+
+                <div class="mb-4 text-right">
+                    <input type="text" id="search" placeholder="Search by Name..." oninput="searchTable()"
+                        class="p-2 border rounded text-black">
+                </div>
+            </div>
+            <table id="salesTable">
+                <thead>
+                    <tr>
+                        <th class="border px-2 py-2 text-left">#</th>
+                        <th class="border px-2 py-2 text-left">Date</th>
+                        <th class="border px-2 py-2 text-left">Name</th>
+                        <th class="border px-2 py-2 text-left">Remarks</th>
+                        <th class="border px-2 py-2 text-left">12kg Load</th>
+                        <th class="border px-2 py-2 text-left">12kg Empty</th>
+                        <th class="border px-2 py-2 text-left">17kg Load</th>
+                        <th class="border px-2 py-2 text-left">17kg Empty</th>
+                        <th class="border px-2 py-2 text-left">SRG</th>
+                        <th class="border px-2 py-2 text-left">Adap</th>
+                        <th class="border px-2 py-2 text-left">Stove</th>
+                        <th class="border px-2 py-2 text-left">Lighter</th>
+                        <th class="border px-2 py-2 text-left">Tube</th>
+                        <th class="border px-2 py-2 text-left">Total Amount</th>
+                        <th class="border px-2 py-2 text-left">Deposit</th>
+                        <th class="border px-2 py-2 text-left">Amount Paid</th>
+                        <th class="border px-2 py-2 text-left">Amount OD</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Data will be dynamically inserted here -->
+                </tbody>
+            </table>
+
+            <div class="mt-4 flex justify-center space-x-4">
+                <button onclick="prevPage()"
+                    class="bg-blue-500 hover:bg-blue-700 text-white text-center font-bold py-2 px-4 rounded shadow-lg transform hover:scale-105 transition-transform">Previous</button>
+                <span id="page-info">Page 1</span>
+                <button onclick="nextPage()"
+                    class="bg-blue-500 hover:bg-blue-700 text-white text-center font-bold py-2 px-4 rounded shadow-lg transform hover:scale-105 transition-transform">Next</button>
+            </div>
+        </div>
+    </main>
+    <script>
+        let currentPage = 1;
+        const rowsPerPage = 10;
+        let salesData = [];
+
+        function getReport() {
+            const fromDate = document.getElementById('fromDate').value;
+            const toDate = document.getElementById('toDate').value;
+
+            fetch(`fetch_sales_report.php?fromDate=${fromDate}&toDate=${toDate}`)
+                .then(response => response.json())
+                .then(data => {
+                    salesData = data;
+                    currentPage = 1;
+                    displayTable();
+                    document.getElementById('page1').classList.add('hidden');
+                    document.getElementById('page2').classList.remove('hidden');
+                })
+                .catch(error => console.error('Error fetching sales data:', error));
+        }
+
+        function formatDate(dateString) {
+            if (!dateString) return '';
+            const [year, month, day] = dateString.split('-');
+            return `${day}-${month}-${year}`;
+        }
+
+        function calculateTotals(data) {
+            const totals = {
+                load12kg: 0,
+                empty12kg: 0,
+                load17kg: 0,
+                empty17kg: 0,
+                srg: 0,
+                adap: 0,
+                stove: 0,
+                lighter: 0,
+                hose: 0,
+                totalAmount: 0,
+                deposit: 0,
+                amountPaid: 0,
+                amountOD: 0,
+            };
+
+            data.forEach(row => {
+                totals.load12kg += parseFloat(row.load12kg) || 0;
+                totals.empty12kg += parseFloat(row.empty12kg) || 0;
+                totals.load17kg += parseFloat(row.load17kg) || 0;
+                totals.empty17kg += parseFloat(row.empty17kg) || 0;
+                totals.srg += parseFloat(row.srg) || 0;
+                totals.adap += parseFloat(row.adap) || 0;
+                totals.stove += parseFloat(row.stove) || 0;
+                totals.lighter += parseFloat(row.lighter) || 0;
+                totals.hose += parseFloat(row.hose) || 0;
+                totals.totalAmount += parseFloat(row.totalAmount) || 0;
+                totals.deposit += parseFloat(row.deposit) || 0;
+                totals.amountPaid += parseFloat(row.amountPaid) || 0;
+                totals.amountOD += parseFloat(row.amountOD) || 0;
+            });
+
+            return totals;
+        }
+
+        function displayTable() {
+            const tbody = document.querySelector('#salesTable tbody');
+            tbody.innerHTML = '';
+
+            const start = (currentPage - 1) * rowsPerPage;
+            const end = start + rowsPerPage;
+            const paginatedData = salesData.slice(start, end);
+
+            paginatedData.forEach((data, index) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                   <td class="py-2 px-2 text-white border border-gray-300">${start + index + 1}</td>
+    <td class="py-4 px-4 text-white border border-gray-300">${formatDate(data.salesDate)}</td>
+    <td class="py-4 px-4 text-white border border-gray-300">${data.customerName}</td>
+    <td class="py-4 px-4 text-white border border-gray-300">${data.remarks}</td>
+    <td class="py-2 px-2 text-white border border-gray-300">${data.load12kg}</td>
+    <td class="py-2 px-2 text-white border border-gray-300">${data.empty12kg}</td>
+    <td class="py-2 px-2 text-white border border-gray-300">${data.load17kg}</td>
+    <td class="py-2 px-2 text-white border border-gray-300">${data.empty17kg}</td>
+    <td class="py-2 px-2 text-white border border-gray-300">${data.srg}</td>
+    <td class="py-2 px-2 text-white border border-gray-300">${data.adap}</td>
+    <td class="py-2 px-2 text-white border border-gray-300">${data.stove}</td>
+    <td class="py-2 px-2 text-white border border-gray-300">${data.lighter}</td>
+    <td class="py-2 px-2 text-white border border-gray-300">${data.hose}</td>
+    <td class="py-2 px-2 text-white border border-gray-300">${data.totalAmount}</td>
+    <td class="py-2 px-2 text-white border border-gray-300">${data.deposit}</td>
+    <td class="py-2 px-2 text-white border border-gray-300">${data.amountPaid}</td>
+    <td class="py-2 px-2 text-white border border-gray-300">${data.amountOD}</td>
+                `;
+                tbody.appendChild(row);
+            });
+
+            const totals = calculateTotals(salesData);
+
+            const totalRow = document.createElement('tr');
+            totalRow.innerHTML = `
+                <td class="py-2 px-2 border border-gray-300" colspan="4"><strong>Total</strong></td>
+                <td class="py-2 px-2 border border-gray-300">${totals.load12kg.toFixed(2)}</td>
+                <td class="py-2 px-2 border border-gray-300">${totals.empty12kg.toFixed(2)}</td>
+                <td class="py-2 px-2 border border-gray-300">${totals.load17kg.toFixed(2)}</td>
+                <td class="py-2 px-2 border border-gray-300">${totals.empty17kg.toFixed(2)}</td>
+                <td class="py-2 px-2 border border-gray-300">${totals.srg.toFixed(2)}</td>
+                <td class="py-2 px-2 border border-gray-300">${totals.adap.toFixed(2)}</td>
+                <td class="py-2 px-2 border border-gray-300">${totals.stove.toFixed(2)}</td>
+                <td class="py-2 px-2 border border-gray-300">${totals.lighter.toFixed(2)}</td>
+                <td class="py-2 px-2 border border-gray-300">${totals.hose.toFixed(2)}</td>
+                <td class="py-2 px-2 border border-gray-300">${totals.totalAmount.toFixed(2)}</td>
+                <td class="py-2 px-2 border border-gray-300">${totals.deposit.toFixed(2)}</td>
+                <td class="py-2 px-2 border border-gray-300">${totals.amountPaid.toFixed(2)}</td>
+                <td class="py-2 px-2 border border-gray-300">${totals.amountOD.toFixed(2)}</td>
+            `;
+            tbody.appendChild(totalRow);
+
+            updatePagination();
+        }
+
+        function updatePagination() {
+            document.getElementById('page-info').textContent = `Page ${currentPage}`;
+        }
+
+        function prevPage() {
+            if (currentPage > 1) {
+                currentPage--;
+                displayTable();
+            }
+        }
+
+        function nextPage() {
+            if (currentPage * rowsPerPage < salesData.length) {
+                currentPage++;
+                displayTable();
+            }
+        }
+
+        function searchTable() {
+            const searchValue = document.getElementById('search').value.toLowerCase();
+            const filteredData = salesData.filter(data => {
+                return data.customerName.toLowerCase().includes(searchValue) || data.remarks.toLowerCase().includes(searchValue);
+            });
+            displayFilteredTable(filteredData);
+        }
+
+
+        function displayFilteredTable(data) {
+            const tbody = document.querySelector('#salesTable tbody');
+            tbody.innerHTML = '';
+
+            data.forEach((rowData, index) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td class="py-2 px-2 border border-gray-300">${index + 1}</td>
+                    <td class="py-2 px-2 border border-gray-300">${formatDate(rowData.salesDate)}</td>
+                    <td class="py-2 px-2 border border-gray-300">${rowData.customerName}</td>
+                    <td class="py-2 px-2 border border-gray-300">${rowData.remarks}</td>
+                    <td class="py-2 px-2 border border-gray-300">${rowData.load12kg}</td>
+                    <td class="py-2 px-2 border border-gray-300">${rowData.empty12kg}</td>
+                    <td class="py-2 px-2 border border-gray-300">${rowData.load17kg}</td>
+                    <td class="py-2 px-2 border border-gray-300">${rowData.empty17kg}</td>
+                    <td class="py-2 px-2 border border-gray-300">${rowData.srg}</td>
+                    <td class="py-2 px-2 border border-gray-300">${rowData.adap}</td>
+                    <td class="py-2 px-2 border border-gray-300">${rowData.stove}</td>
+                    <td class="py-2 px-2 border border-gray-300">${rowData.lighter}</td>
+                    <td class="py-2 px-2 border border-gray-300">${rowData.hose}</td>
+                    <td class="py-2 px-2 border border-gray-300">${rowData.totalAmount}</td>
+                    <td class="py-2 px-2 border border-gray-300">${rowData.deposit}</td>
+                    <td class="py-2 px-2 border border-gray-300">${rowData.amountPaid}</td>
+                    <td class="py-2 px-2 border border-gray-300">${rowData.amountOD}</td>
+                `;
+                tbody.appendChild(row);
+            });
+
+            const totals = calculateTotals(data);
+
+            const totalRow = document.createElement('tr');
+            totalRow.innerHTML = `
+                <td class="py-2 px-2 border border-gray-300" colspan="4"><strong>Total</strong></td>
+                <td class="py-2 px-2 border border-gray-300">${totals.load12kg.toFixed(2)}</td>
+                <td class="py-2 px-2 border border-gray-300">${totals.empty12kg.toFixed(2)}</td>
+                <td class="py-2 px-2 border border-gray-300">${totals.load17kg.toFixed(2)}</td>
+                <td class="py-2 px-2 border border-gray-300">${totals.empty17kg.toFixed(2)}</td>
+                <td class="py-2 px-2 border border-gray-300">${totals.srg.toFixed(2)}</td>
+                <td class="py-2 px-2 border border-gray-300">${totals.adap.toFixed(2)}</td>
+                <td class="py-2 px-2 border border-gray-300">${totals.stove.toFixed(2)}</td>
+                <td class="py-2 px-2 border border-gray-300">${totals.lighter.toFixed(2)}</td>
+                <td class="py-2 px-2 border border-gray-300">${totals.hose.toFixed(2)}</td>
+                <td class="py-2 px-2 border border-gray-300">${totals.total_amount.toFixed(2)}</td>
+                <td class="py-2 px-2 border border-gray-300">${totals.deposit.toFixed(2)}</td>
+                <td class="py-2 px-2 border border-gray-300">${totals.amount_paid.toFixed(2)}</td>
+                <td class="py-2 px-2 border border-gray-300">${totals.amount_od.toFixed(2)}</td>
+            `;
+            tbody.appendChild(totalRow);
+        }
+
+        function exportPDF() {
+            const fromDate = document.getElementById('fromDate').value;
+            const toDate = document.getElementById('toDate').value;
+
+            if (!fromDate || !toDate) {
+                alert('Please select both from and to dates.');
+                return;
+            }
+
+            // Filter the data
+            const filteredData = salesData.filter(data => {
+                const saleDate = new Date(data.salesDate);
+                return saleDate >= new Date(fromDate) && saleDate <= new Date(toDate);
+            });
+
+            if (filteredData.length === 0) {
+                alert('No data available for the selected date range.');
+                return;
+            }
+
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            const headers = [['#', 'Date', 'Name', 'Remarks', '12kg Load', '12kg Empty', '17kg Load', '17kg Empty', 'SRG', 'Adap', 'Stove', 'Lighter', 'Tube', 'Total Amount', 'Deposit', 'Amount Paid', 'Amount OD']];
+            const rows = filteredData.map((data, index) => [
+                index + 1,
+                formatDate(data.salesDate),
+                data.customerName || '',
+                data.remarks || '',
+                data.load12kg || 0,
+                data.empty12kg || 0,
+                data.load17kg || 0,
+                data.empty17kg || 0,
+                data.srg || 0,
+                data.adap || 0,
+                data.stove || 0,
+                data.lighter || 0,
+                data.hose || 0,
+                data.totalAmount || 0,
+                data.deposit || 0,
+                data.amountPaid || 0,
+                data.amountOD || 0
+            ]);
+
+            doc.autoTable({
+                head: headers,
+                body: rows,
+            });
+
+            doc.save(`sales_report_${fromDate}_to_${toDate}.pdf`);
+        }
+
+        function exportExcel() {
+            const wb = XLSX.utils.book_new();
+
+            const dataWithoutTotals = salesData.map((data, index) => ({
+                '#': index + 1,
+                'Date': formatDate(data.salesDate || ''),  // Handle undefined date
+                'Name': data.customerName || '',
+                'Remarks': data.remarks || '',
+                '12kg Load': data.load12kg || 0,
+                '12kg Empty': data.empty12kg || 0,
+                '17kg Load': data.load17kg || 0,
+                '17kg Empty': data.empty17kg || 0,
+                'SRG': data.srg || 0,
+                'Adap': data.adap || 0,
+                'Stove': data.stove || 0,
+                'Lighter': data.lighter || 0,
+                'Tube': data.hose || 0,
+                'Total Amount': data.totalAmount || 0,
+                'Deposit': data.deposit || 0,
+                'Amount Paid': data.amountPaid || 0,
+                'Amount OD': data.amountOD || 0
+            }));
+
+            const ws = XLSX.utils.json_to_sheet(dataWithoutTotals);
+            XLSX.utils.book_append_sheet(wb, ws, "Sales Report");
+            XLSX.writeFile(wb, "sales_report.xlsx");
+        }
+
+        function printTable() {
+            const fromDate = document.getElementById('fromDate').value;
+            const toDate = document.getElementById('toDate').value;
+
+            const printWindow = window.open('', '', 'width=800,height=600');
+            const filteredData = salesData.filter(data => {
+                const saleDate = new Date(data.salesDate);
+                return saleDate >= new Date(fromDate) && saleDate <= new Date(toDate);
+            });
+
+            let tableHTML = `
+        <html>
+        <head>
+            <title>Print Sales Report</title>
+            <style>
+                table { width: 100%; border-collapse: collapse; }
+                th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+                th { background-color: #f2f2f2; }
+            </style>
+        </head>
+        <body>
+            <h3>Sales Report from ${fromDate} to ${toDate}</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Date</th>
+                        <th>Name</th>
+                        <th>Remarks</th>
+                        <th>12kg Load</th>
+                        <th>12kg Empty</th>
+                        <th>17kg Load</th>
+                        <th>17kg Empty</th>
+                        <th>SRG</th>
+                        <th>Adap</th>
+                        <th>Stove</th>
+                        <th>Lighter</th>
+                        <th>Tube</th>
+                        <th>Total Amount</th>
+                        <th>Deposit</th>
+                        <th>Amount Paid</th>
+                        <th>Amount OD</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${filteredData.map((data, index) => `
+                        <tr>
+                            <td>${index + 1}</td>
+                            <td>${formatDate(data.salesDate)}</td>
+                            <td>${data.customerName}</td>
+                            <td>${data.remarks}</td>
+                            <td>${data.load12kg}</td>
+                            <td>${data.empty12kg}</td>
+                            <td>${data.load17kg}</td>
+                            <td>${data.empty17kg}</td>
+                            <td>${data.srg}</td>
+                            <td>${data.adap}</td>
+                            <td>${data.stove}</td>
+                            <td>${data.lighter}</td>
+                            <td>${data.hose}</td>
+                            <td>${data.totalAmount}</td>
+                            <td>${data.deposit}</td>
+                            <td>${data.amountPaid}</td>
+                            <td>${data.amountOD}</td>
+                        </tr>
+                    `).join('')}
+                </tbody>
+            </table>
+        </body>
+        </html>
+    `;
+
+            printWindow.document.write(tableHTML);
+            printWindow.document.close();
+            printWindow.print();
+        }
+
+
+
+    </script>
+</body>
+
+</html>

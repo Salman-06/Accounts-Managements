@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sales Data Viewer</title>
+    <link rel="stylesheet" href="style.css">
+    <script defer>
+        let salesData = []; // Global variable to store all sales data
+        let currentPage = 1; // Track the current page
+        const rowsPerPage = 25; // Number of rows per page
+
+function fetchSalesDataByDate() {
+    const selectedDate = document.getElementById('selectDate').value;
+    if (selectedDate) {
+        fetch(`fetch_sales_by_date.php?date=${selectedDate}`)
+            .then(response => response.json())
+            .then(data => {
+                salesData = data.sales || []; // Assign data to salesData or default to an empty array
+                displaySalesData(salesData); // Display the first page initially
+                updateTotals(data.totals || {}); // Handle case where totals might be undefined
+                document.getElementById("salesContent").style.display = "block";
+                document.getElementById("dateSelection").style.display = "none";
+            })
+            .catch(error => console.error('Error fetching sales data:', error));
+    } else {
+        alert("Please select a date.");
+    }
+}
+
+function displaySalesData(filteredData = salesData) {
+    // Ensure filteredData has a value to prevent errors
+    if (!Array.isArray(filteredData)) {
+        console.error("Invalid data: filteredData is not an array.");
+        return;
+    }
+    
+    const tbody = document.getElementById('salesTable').querySelector('tbody');
+    tbody.innerHTML = ''; // Clear existing rows
+
+    // Calculate start and end indexes for pagination
+    const start = (currentPage - 1) * rowsPerPage;
+    const end = start + rowsPerPage;
+    const paginatedData = filteredData.slice(start, end);
+
+    paginatedData.forEach((item, index) => {
+        const row = `<tr class="text-white border-b border-gray-300">
+            <td class="py-2 px-2">${start + index + 1}</td>
+            <td class="py-2 px-2">${item.salesDate}</td>
+            <td class="py-2 px-2">${item.customerName}</td>
+            <td class="py-2 px-2">${item.remarks}</td>
+            <td class="py-2 px-2">${item.amountPaid}</td>
+        </tr>`;
+        tbody.insertAdjacentHTML('beforeend', row);
+    });
+
+    // Add totals row
+    addTotalsRow(paginatedData);
+
+    // Update pagination controls
+    updatePagination(filteredData);
+}
+
+
+        function addTotalsRow(data) {
+            // Calculate totals for each integer column
+            let totalAmountPaid = 0;
+
+            data.forEach(item => {
+                totalAmountPaid += parseFloat(item.amountPaid) || 0;
+            });
+
+            const tbody = document.getElementById('salesTable').querySelector('tbody');
+            const totalRow = `<tr class="font-bold text-white border-t border-gray-300">
+                <td colspan="4" class="py-2 px-2 text-right">Total</td>
+                <td class="py-2 px-2">${totalAmountPaid}</td>
+            </tr>`;
+            tbody.insertAdjacentHTML('beforeend', totalRow);
+        }
+
+        function updateTotals(totals) {
+            document.getElementById('totalForSelectedDate').innerText = totals.totalForSelectedDate;
+            document.getElementById('odCollectedTotal').innerText = totals.odCollectedTotal;
+            document.getElementById('outstandingTotal').innerText = totals.outstandingTotal;
+            document.getElementById('finalTotal').innerText = totals.finalTotal;
+        }
+
+        function searchTable() {
+            const searchValue = document.getElementById('search').value.toLowerCase();
+            const filteredData = salesData.filter(data =>
+                data.customerName.toLowerCase().includes(searchValue) ||
+                data.remarks.toLowerCase().includes(searchValue)
+            );
+            currentPage = 1; // Reset to first page after search
+            displaySalesData(filteredData); // Display the filtered data
+        }
+
+        function updatePagination(filteredData = salesData) {
+            const totalPages = Math.ceil(filteredData.length / rowsPerPage);
+            document.getElementById('page-info').textContent = `Page ${currentPage} of ${totalPages}`;
+            document.getElementById('prev-btn').disabled = currentPage === 1;
+            document.getElementById('next-btn').disabled = currentPage === totalPages;
+        }
+
+        function prevPage() {
+            if (currentPage > 1) {
+                currentPage--;
+                searchTable(); // Refresh the table with the updated page
+            }
+        }
+
+        function nextPage() {
+            const filteredData = salesData.filter(data =>
+                data.customerName.toLowerCase().includes(document.getElementById('search').value.toLowerCase()) ||
+                data.remarks.toLowerCase().includes(document.getElementById('search').value.toLowerCase())
+            );
+            const totalPages = Math.ceil(filteredData.length / rowsPerPage);
+            if (currentPage < totalPages) {
+                currentPage++;
+                searchTable(); // Refresh the table with the updated page
+            }
+        }
+    </script>
+</head>
+<body class="bg-11121a">
+    <main>
+        <!-- Date Selection Section -->
+        <div id="dateSelection" class="container mx-auto bg-11121a p-8 rounded-lg shadow-lg">
+            <h2 class="text-2xl font-bold text-white mb-4">Select Date for Sales Data</h2>
+            <div class="mb-4 flex space-x-3">
+                <input type="date" id="selectDate" class="border px-3 py-2 rounded focus:outline-none text-black" required>
+                <button
+                    onclick="fetchSalesDataByDate()"
+                    class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded shadow-lg">
+                    Get Sales
+                </button>
+            </div>
+        </div>
+
+        <!-- Sales Data Display Section -->
+        <div id="salesContent" class="container mx-auto bg-11121a p-8 rounded-lg shadow-lg" style="display: none;">
+            <h2 class="text-2xl font-bold text-white mb-4">Sales Data for Selected Date</h2>
+
+            <!-- Totals Summary Section -->
+            <div class="mb-4 flex space-x-4 text-white">
+                <div>Total: <span id="totalForSelectedDate"></span></div>
+                <div>OD Collected: <span id="odCollectedTotal"></span></div>
+                <div>Outstanding: <span id="outstandingTotal"></span></div>
+                <div>Final Total: <span id="finalTotal"></span></div>
+            </div>
+
+            <!-- Search and Pagination Controls -->
+            <div class="text-right mb-4">
+                <input type="text" id="search" placeholder="Search by Remarks or Customer Name..."
+                    class="border px-3 py-2 rounded focus:outline-none text-black" oninput="searchTable()">
+            </div>
+
+            <!-- Sales Data Table -->
+            <table id="salesTable" class="min-w-full bg-11121a border border-gray-300 mt-6">
+                <thead>
+                    <tr class="text-white uppercase text-sm leading-normal border-b border-gray-300">
+                        <th class="py-2 px-2 border border-gray-300">#</th>
+                        <th class="py-2 px-2 border border-gray-300">DATE</th>
+                        <th class="py-2 px-2 border border-gray-300">NAME</th>
+                        <th class="py-2 px-2 border border-gray-300">REMARKS</th>
+                        <th class="py-2 px-2 border border-gray-300">AMT Paid</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Sales data rows will be added here dynamically -->
+                </tbody>
+            </table>
+
+            <!-- Pagination Controls -->
+            <div class="flex justify-center mt-4">
+                <button id="prev-btn" onclick="prevPage()"
+                    class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded shadow-lg"
+                    disabled>
+                    Previous
+                </button>
+                <span id="page-info" class="px-4">Page 1</span>
+                <button id="next-btn" onclick="nextPage()"
+                    class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded shadow-lg">
+                    Next
+                </button>
+            </div>
+        </div>
+    </main>
+</body>
+</html>
